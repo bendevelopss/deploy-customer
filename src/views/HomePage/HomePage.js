@@ -220,7 +220,8 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            images={images.package.images}
+            data={images}
+            // images={images.package.images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}
@@ -238,7 +239,8 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            images={images.package.images}
+            // images={images.package.images}
+            data={images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}
@@ -256,7 +258,7 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            images={images.package.images}
+            // images={images.package.images}
             data={images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
@@ -283,7 +285,7 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            images={images.package.images}
+            // images={images.package.images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}
@@ -307,7 +309,7 @@ export default function HomePage(props) {
             data={images}
             activeStep={activeStep}
             steps={steps}
-            images={images.package.images}
+            // images={images.package.images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}
@@ -331,7 +333,8 @@ export default function HomePage(props) {
             data={images}
             activeStep={activeStep}
             steps={steps}
-            images={images.package.images}
+            // images={images.package.images}
+            handleImageModal={handleImageModal}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}

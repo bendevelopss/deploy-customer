@@ -65,7 +65,7 @@ const useStyles2 = makeStyles(theme => ({
 }));
 
 export default function SectionImageModal(props) {
-  const { selectedImage, handleImageModal, packageType } = props;
+  const { selectedImage, handleImageModal, packageType, total } = props;
   const sectionClass = useStyles2();
   const settings = {
     dots: false,
@@ -140,8 +140,9 @@ export default function SectionImageModal(props) {
                       <div>
                         <Button
                           round
+                          disabled={total <= 9 ? false : true}
                           color="pink"
-                          onClick={() => handleImageModal(selectedImage, true)}
+                          onClick={() => total <= 9 ? handleImageModal(selectedImage, true) : null}
                         >
                           Done
                         </Button>

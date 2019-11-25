@@ -48,9 +48,10 @@ export default function EditPackage(props) {
     // getStepContent,
     // activeStep,
     // steps,
-    images,
+    data,
     handleBack,
-    handleSelectedPage
+    handleSelectedPage,
+    handleImageModal
     // handleReset,
     // handleNext,
     // isStepOptional,
@@ -76,7 +77,7 @@ export default function EditPackage(props) {
     else setEdit(true)
   }
 
-  console.log(images);
+  console.log(data);
 
   return (
     <div
@@ -103,7 +104,7 @@ export default function EditPackage(props) {
             <GridItem justify="center" xs={12} sm={12} md={6} className={classes.alignText}>
               <div>
                 <h4 className={classes.header}>Edit Package A</h4>
-                <h4 className={classes.subheader}>Add 2 more photos</h4>
+                <h4 className={classes.subheader}>Add {10 - data.package.images.filter(img => img.selected).length} more photos </h4>
                 /</div>
             </GridItem>
           </GridContainer>
@@ -124,11 +125,12 @@ export default function EditPackage(props) {
 
               <GridContainer>
                 <GridContainer justify="center" spacing={4}>
-                  {images.length > 0 ? images.map(img => (
-                    <div  className={classes.photoGrid}>
+                  {data.package.images.length > 0 ? data.package.images.map(img => (
+                    <div className={classes.photoGrid} onClick={() => !img.selected && data.package.images.filter(img => img.selected).length <= 9 ? handleImageModal(img, true) : handleImageModal(img, false)}>
                       <Card>
-                        <div >
+                        <div>
                           <img
+                            style={{ "border": img.selected ? `2px solid ${pinkColor}` : 0 }}
                             alt="..."
                             src={img.image}
                             className={navImageClasses}
@@ -143,9 +145,9 @@ export default function EditPackage(props) {
                   }
                   {isEdit ?
                     <div style={{ width: '15vw', marginRight: 8 }}>
-                      <div  className={classes.iconLayout, classes.addIcon}>
+                      <div className={classes.iconLayout, classes.addIcon}>
                         <span className={classes.icons, classes.textAlign}>
-                          <i class="fas fa-plus" style={{  }}></i>
+                          <i class="fas fa-plus" style={{}}></i>
                           <h4 className={classes.title}>Add 2 more photos</h4>
                         </span>
                       </div>

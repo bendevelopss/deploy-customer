@@ -104,7 +104,7 @@ export default function ViewPhotos(props) {
             <GridItem justify="center" xs={12} sm={12} md={6} style={{ 'text-align': 'center' }}>
               <div>
                 <h4 className={classes.header}>Package A</h4>
-                <h4 className={classes.subheader}>34 photos in total</h4>
+                <h4 className={classes.subheader}>{data.package.images.filter(e => e.selected).length * data.packageType.length} photos in total</h4>
                 /</div>
             </GridItem>
           </GridContainer>
@@ -147,8 +147,19 @@ export default function ViewPhotos(props) {
                           ))
                             : null
                         }
+                        {isEdit ?
+                          <div style={{ width: '15vw', marginRight: 8, "padding-top": "7vh" }} onClick={() => handleSelectedPage("editPackage")}>
+                            <div style={{ border: '5px dotted pink', textAlign: 'center' }}>
+                              <span className={classes.icons} style={{ textAlign: 'center' }}>
+                                <i class="fas fa-plus" style={{ fontSize: '10vh' }}></i>
+                                <h4 className={classes.title}>Add {10 - data.package.images.filter(img => img.selected).length} more photos</h4>
+                              </span>
+                            </div>
+                          </div>
+                          : null
+                        }
                         {
-                          data.package.images.filter(e => e.selected).length === 0 ? <h4 className={classes.title}>NO PHOTOS SELECTED</h4>
+                          data.package.images.filter(e => e.selected).length === 0 && !isEdit ? <h4 className={classes.title}>NO PHOTOS SELECTED</h4>
                             : null
                         }
 

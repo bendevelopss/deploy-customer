@@ -172,6 +172,7 @@ export function ImageModal(props) {
                         selectedImage={selectedImage}
                         handleImageModal={handleImageModal}
                         packageType={data.packageType}
+                        total={data.package.images.filter(img => img.selected).length }
                     />
                 </div>
             </DialogContent>
@@ -192,27 +193,28 @@ export function ImageModal(props) {
 }
 
 function FavoritePhotos(props) {
-    const { images, classes, navImageClasses, handleDoubleClick, handleCheckoutModal, imageModal, handleSelectPhoto } = props
+    const { data, classes, navImageClasses, handleDoubleClick, handleCheckoutModal, imageModal, handleSelectPhoto } = props
     return (
         <GridContainer justify="center" spacing={4} style={{ color: 'black' }}>
-            {images.filter(like => !like.favorite === images.length)}
-            {images.length > 0 ? images.filter(like => like.favorite).map(img => (
+            {data.package.images.filter(like => !like.favorite === data.package.images.length)}
+            {data.package.images.length > 0 ? data.package.images.filter(like => like.favorite).map(img => (
 
                 <div style={{ width: '20%', marginRight: 8 }}>
                     <Card>
-                        <div >
+                        <div>
                             <img
                                 alt="..."
+                                style={{ "border": img.selected ? `2px solid ${pinkColor}` : 0 }}
                                 src={img.image}
                                 className={navImageClasses}
-                                onClick={() => handleSelectPhoto(img.image)}
+                                onClick={() => handleSelectPhoto({ name: img.name, src: img.image, selected: img.selected, index: img.index })}
                             />
                         </div>
                     </Card>
                 </div>
             )) : null
             }
-            {images.filter(like => like.favorite).length === 0 ? <h4 className={classes.title, classes.marginTop}>NO PHOTOS SELECTED</h4> : null}
+            {data.package.images.filter(img => img.favorite).length === 0 ? <h4 className={classes.title, classes.marginTop}>NO PHOTOS SELECTED</h4> : null}
 
 
         </GridContainer>
@@ -220,15 +222,16 @@ function FavoritePhotos(props) {
 }
 
 function AllPhotos(props) {
-    const { images, classes, navImageClasses, handleSelectPhoto } = props
+    const { data, classes, navImageClasses, handleSelectPhoto } = props
     return (
         <GridContainer justify="center" spacing={4}>
-            {images.length > 0 ? images.map(img => (
-                <div style={{ width: '20%', marginRight: 8, "border-bottom": img.selected ? `2px solid red` : 0 }}>
+            {data.package.images.length > 0 ? data.package.images.map(img => (
+                <div style={{ width: '20%', marginRight: 8 }}>
                     <Card>
-                        <div >
+                        <div>
                             <img
                                 alt="..."
+                                style={{ "border": img.selected ? `2px solid ${pinkColor}` : 0 }}
                                 src={img.image}
                                 className={navImageClasses}
                                 onClick={() => handleSelectPhoto({ name: img.name, src: img.image, selected: img.selected, index: img.index })}
@@ -258,7 +261,7 @@ export default function SelectPhoto(props) {
         classes,
         activeStep,
         steps,
-        images,
+        data,
         navImageClasses,
         handleDoubleClick,
         handleBack,
@@ -274,7 +277,6 @@ export default function SelectPhoto(props) {
         handleImageModal,
         imageModal,
         selectedImage,
-        data
     } = props;
 
     return (
@@ -331,7 +333,7 @@ export default function SelectPhoto(props) {
                                 tabIcon: Favorite,
                                 tabContent: (
                                     <FavoritePhotos
-                                        images={images}
+                                        data={data}
                                         classes={classes}
                                         navImageClasses={navImageClasses}
                                         handleDoubleClick={handleDoubleClick}
@@ -344,7 +346,7 @@ export default function SelectPhoto(props) {
                                 tabIcon: PhotoCamera,
                                 tabContent: (
                                     <AllPhotos
-                                        images={images}
+                                        data={data}
                                         classes={classes}
                                         navImageClasses={navImageClasses}
                                         handleSelectPhoto={handleSelectPhoto}
@@ -370,8 +372,8 @@ export default function SelectPhoto(props) {
                 handleBack={handleBack}
                 handleReset={handleReset}
                 handleNext={handleNext}
-                total={images ? images.length : 0}
-                liked={Object.values(images).reduce((a, { liked }) => a + liked, 0)}
+                // total={data.package.images ? data.package.images.length : 0}
+                // liked={Object.values(data.package.images).reduce((a, { liked }) => a + liked, 0)}
                 isStepOptional={isStepOptional}
                 handleSkip={handleSkip}
                 handleCheckoutModal={handleCheckoutModal}

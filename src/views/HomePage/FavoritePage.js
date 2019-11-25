@@ -30,7 +30,7 @@ export default function FavoritePhoto(props) {
         classes,
         activeStep,
         steps,
-        images,
+        data,
         navImageClasses,
         handleDoubleClick,
         handleBack,
@@ -40,6 +40,7 @@ export default function FavoritePhoto(props) {
         handleSkip,
         handleReturn
     } = props;
+
     return (
         <div>
             <div className={classes.container}>
@@ -57,7 +58,7 @@ export default function FavoritePhoto(props) {
                     </GridItem>
                 </GridContainer>
                 <GridContainer justify="center" spacing={4}>
-                {images.length > 0 ? images.map(img => (
+                {data.package.images.length > 0 ? data.package.images.map(img => (
                         <GridItem xs={12} sm={6} md={4} lg={3} spacing={4}>
 
                             <Card>
@@ -93,8 +94,8 @@ export default function FavoritePhoto(props) {
                 handleBack={handleBack}
                 handleReset={handleReset}
                 handleNext={handleNext}
-                total={images.length}
-                liked={Object.values(images).reduce((a, { favorite }) => a + favorite, 0)}
+                total={data.package.images.length}
+                liked={Object.values(data.package.images).reduce((a, { favorite }) => a + favorite, 0)}
                 isStepOptional={isStepOptional}
                 handleSkip={handleSkip}
             />

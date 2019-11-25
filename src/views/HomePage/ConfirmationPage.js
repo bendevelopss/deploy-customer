@@ -26,7 +26,7 @@ export default function Confirmation(props) {
     getStepContent,
     activeStep,
     steps,
-    images,
+    // images,
     handleBack,
     handleReset,
     handleNext,
@@ -214,8 +214,8 @@ export default function Confirmation(props) {
         handleBack={handleBack}
         handleReset={handleReset}
         handleNext={handleNext}
-        total={images.length}
-        liked={Object.values(images).reduce((a, { liked }) => a + liked, 0)}
+        // total={images.length}
+        // liked={Object.values(images).reduce((a, { liked }) => a + liked, 0)}
         isStepOptional={isStepOptional}
         handleSkip={handleSkip}
         handleReturn={handleReturn}

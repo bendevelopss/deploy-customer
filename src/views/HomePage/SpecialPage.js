@@ -26,7 +26,7 @@ export default function SpecialPackage(props) {
         getStepContent,
         activeStep,
         steps,
-        images,
+        data,
         handleBack,
         handleReset,
         handleNext,
@@ -117,8 +117,8 @@ export default function SpecialPackage(props) {
                 handleBack={handleBack}
                 handleReset={handleReset}
                 handleNext={handleNext}
-                total={images.length}
-                liked={Object.values(images).reduce((a, { liked }) => a + liked, 0)}
+                total={data.package.images.length}
+                liked={Object.values(data.package.images).reduce((a, { liked }) => a + liked, 0)}
                 isStepOptional={isStepOptional}
                 handleSkip={handleSkip}
             />
