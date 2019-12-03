@@ -22,6 +22,20 @@ import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js
 
 const useStyles = makeStyles(styles);
 
+const menu = [
+  {package_id:2, package: 'Package A', special_package: false, products:[
+    {product_id: 1, name: '15 page album', id:[123123,123123,123123]},
+    {product_id: 2, name: '4R photos', id:[123123,123123,123123]},
+    {product_id: 3, name: 'Digital Print', id:[123123,123123,123123]},
+  ]},
+  {package_id:2, package: 'Package B', special_package: false, products:[
+    {product_id: 1, name: '15 page album', id:[123123,123123]},
+    {product_id: 3, name: 'Digital Print', id:[123123,123123,123123,123123]},
+    {product_id: 2, name: '4R photos', id:[123123,123123,123123]}
+  ]},
+];
+
+
 export default function HeaderLinks(props) {
   const classes = useStyles();
   return (
@@ -32,18 +46,37 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         <CustomDropdown
           noLiPadding
-          buttonText="Gallery Cart"
-          color={"pink"}
+          footerItem="Proceed To Checkout"
+          color={"#F74380"}
           buttonProps={{
             className: classes.navLink,
             color: "transparent"
           }}
+          dropdownList={
+            menu.map((pk,i)=>{
+              return(
+                <div>
+                <ul style={{listStyleType: "none", margin:0, padding:0}}>
+                  <li><h6 className={classes.dropdownLink}>{pk.package}<small style={{float: "right"}}>Quantity</small></h6>     </li>
+                  {pk.products.map(pr =>{
+                    return (
+                  <li><p className={classes.dropdownLink}>{pr.name}<text style={{float: "right", color: "#F74380"}}>{pr.id.length}</text></p></li>
+                    )
+                  })}
+                  
+                </ul>
+                </div>
+              ) 
+            })
+          }
           buttonIcon={ShoppingCart}
-          dropdownList={[
-            <h6 className={classes.dropdownLink}>Package A <small style={{float: "right"}}>Quantity</small></h6> ,
-            <a className={classes.dropdownLink}>15 pages album <text style={{float: "right", color: "pink"}}>1</text></a>
-          ]}
+          
         />
+
+{/* dropdownList={[
+            <h6 className={classes.dropdownLink}>Package A <small style={{float: "right"}}>Quantity</small></h6> ,
+            <a className={classes.dropdownLink}>15 pages album <text style={{float: "right", color: "#F74380"}}>1</text></a>
+          ]} */}
       </ListItem>
       {/* <ListItem className={classes.listItem}>
         <Button

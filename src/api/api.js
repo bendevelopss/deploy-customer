@@ -25,15 +25,29 @@ export function getData() {
                 { image: work5, index: 14, selected: false, favorite: false, name: "photo-0015.jpg", album: [], digital: [], loose: [], wallArt: [] },
                 { image: work1, index: 15, selected: false, favorite: false, name: "photo-0016.jpg", album: [], digital: [], loose: [], wallArt: [] }
             ],
-            page_album: 5,
-            four_r_photos: 3,
-            digitalPrint: 10
+            package: [
+                {
+                    name: "Package A",
+                    types: [
+                        { name: "Page Album", quantity: 5 },
+                        { name: "4R Photos", quantity: 10 },
+                        { name: "Digital Print", quantity: 15 },
+                    ],
+                    selected: false
+                }
+            ]
         },
         specialPackage: {
-            availed: false,
+            name: "Special Package A",
+            selected: false,
             packageName: "Creative Session",
             packagePrice: 420,
             description: "",
+            package: [
+                {name: "5R Photos", quantity: 10},
+                {name: "Digital Print", quantity: 5},
+
+            ],
             totalInvestment: [
                 { name: "Creative Session" },
                 { name: "Collection OR Creative Session" },

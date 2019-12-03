@@ -136,6 +136,9 @@ const headerLinksStyle = theme => ({
       padding: "5px 5px 5px 5px"
     }
   },
+  itemOpacity:{
+    opacity: 1
+  },
   ...tooltip,
   marginRight5: {
     marginRight: "5px"

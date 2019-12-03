@@ -5,11 +5,14 @@ import Carousel from "react-slick";
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import LocationOn from "@material-ui/icons/LocationOn";
+import Check from "@material-ui/icons/Check";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Card from "components/Card/Card.js";
 import Button from "components/CustomButtons/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+
 
 import image1 from "assets/img/bg.jpg";
 import image2 from "assets/img/bg2.jpg";
@@ -22,8 +25,8 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import styles from "assets/jss/material-kit-react/views/componentsSections/carouselStyle.js";
-import { pinkColor } from "assets/jss/material-kit-react";
-import { successColor } from "assets/jss/material-kit-react";
+import { pinkColor, successColor } from "assets/jss/material-kit-react";
+import { FormControlLabel } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 
@@ -64,6 +67,7 @@ const useStyles2 = makeStyles(theme => ({
   }
 }));
 
+
 export default function SectionImageModal(props) {
   const { selectedImage, handleImageModal, packageType, total } = props;
   const sectionClass = useStyles2();
@@ -76,14 +80,26 @@ export default function SectionImageModal(props) {
     autoplay: false
   };
 
+  const [checked, setChecked] = React.useState([24, 22]);
+
+  const handleToggle = value => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+    setChecked(newChecked);
+  };
+
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-
-  console.log(props);
 
   return (
     <div>
@@ -123,12 +139,29 @@ export default function SectionImageModal(props) {
                           <GridItem>
                             {type.type ? type.type.map(e => (
                               <div>
-                                <span className={sectionClass.faCheck}>
-                                  <i class="fas fa-check"></i>
-                                </span>
-                                <span className={sectionClass.title}>
-                                  {e.name}
-                                </span>
+                                <div
+                                  className={
+                                    classes.checkboxAndRadio,
+                                    classes.checkboxAndRadioHorizontal
+                                  }
+                                >
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        tabIndex={-1}
+                                        onClick={() => handleToggle(21)}
+                                        checkedIcon={<Check className={classes.checkedIcon} />}
+                                        icon={<Check className={classes.uncheckedIcon} />}
+                                        classes={{
+                                          checked: classes.checked,
+                                          root: classes.checkRoot
+                                        }}
+                                      />
+                                    }
+                                    classes={{ label: classes.label, root: classes.labelRoot }}
+                                    label={e.name}
+                                  />
+                                </div>
                               </div>
                             )) : null}
                           </GridItem>

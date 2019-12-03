@@ -143,7 +143,7 @@ export function ImageModal(props) {
             maxWidth
             // TransitionComponent={Transition}
             keepMounted
-            onClose={() => handleImageModal(selectedImage, false)}
+            // onClose={() => handleImageModal(selectedImage, false)}
             aria-labelledby="classic-modal-slide-title"
             aria-describedby="classic-modal-slide-description"
         >

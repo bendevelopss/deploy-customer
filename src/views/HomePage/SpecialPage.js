@@ -32,7 +32,8 @@ export default function SpecialPackage(props) {
         handleNext,
         isStepOptional,
         handleSkip,
-        handleReturn
+        handleReturn,
+        handleSpecialPackage
     } = props;
 
     return (
@@ -114,6 +115,7 @@ export default function SpecialPackage(props) {
                 activeStep={activeStep}
                 getStepContent={getStepContent}
                 steps={steps}
+                handleSpecialPackage={handleSpecialPackage}
                 handleBack={handleBack}
                 handleReset={handleReset}
                 handleNext={handleNext}

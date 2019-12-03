@@ -55,7 +55,8 @@ export default function CustomDropdown(props) {
     hoverColor,
     left,
     rtlActive,
-    noLiPadding
+    noLiPadding,
+    footerItem
   } = props;
   const caretClasses = classNames({
     [classes.caret]: true,
@@ -126,7 +127,7 @@ export default function CustomDropdown(props) {
           >
             <Paper className={classes.dropdown}>
               <ClickAwayListener onClickAway={handleCloseAway}>
-                <MenuList role="menu" className={classes.menuList}>
+                <MenuList role="menu" className={classes.menuList} dense="true" >
                   {dropdownHeader !== undefined ? (
                     <MenuItem
                       onClick={() => handleClose(dropdownHeader)}
@@ -140,7 +141,7 @@ export default function CustomDropdown(props) {
                       return (
                         <Divider
                           key={key}
-                          onClick={() => handleClose("divider")}
+                          //onClick={() => handleClose("divider")}
                           className={classes.dropdownDividerItem}
                         />
                       );
@@ -148,13 +149,23 @@ export default function CustomDropdown(props) {
                     return (
                       <MenuItem
                         key={key}
-                        onClick={() => handleClose(prop)}
+                        //onClick={() => handleClose(prop)}
                         className={dropdownItem}
+                        style={{opacity:1}}
+                        dense="true"
+                        disabled="true"
                       >
                         {prop}
                       </MenuItem>
                     );
                   })}
+                  {footerItem ? <hr style={{opacity:0.8}}/> : null}
+                  {footerItem ? 
+                    <MenuItem onClick={()=> handleClose("divider")}>
+                      <a>{footerItem}</a>
+                    </MenuItem> : null
+                    }
+                  
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -191,6 +202,7 @@ CustomDropdown.propTypes = {
   caret: PropTypes.bool,
   left: PropTypes.bool,
   noLiPadding: PropTypes.bool,
+  footerItem: PropTypes.node,
   // function that retuns the selected item
   onClick: PropTypes.func
 };

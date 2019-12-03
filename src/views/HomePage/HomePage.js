@@ -153,8 +153,6 @@ export default function HomePage(props) {
     }
   };
 
-  // React.useEffect(() => { console.log("cohandleSelectPhotomponent updated"); }, [images]);
-
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
@@ -183,6 +181,13 @@ export default function HomePage(props) {
     // if (closeModal) setCheckoutModal(false)
     else return;
   };
+
+  const handleSpecialPackage = (bool) => {
+    const curImg = { ...images };
+    curImg.specialPackage.selected = bool;
+    setImages(curImg);
+    handleNext()
+  }
 
   setTimeout(function () {
     setCardAnimation("");
@@ -249,6 +254,7 @@ export default function HomePage(props) {
             isStepOptional={isStepOptional}
             handleSkip={handleSkip}
             handleReturn={handleReturn}
+            handleSpecialPackage={handleSpecialPackage}
           />
         ) : null}
 
@@ -285,6 +291,7 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
+            data={images}
             // images={images.package.images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}

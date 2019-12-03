@@ -55,7 +55,7 @@ function FavoriteFooter(props) {
 }
 
 function SpecialFooter(props) {
-  const { footerClasses, classes, liked, activeStep, steps, handleBack, handleNext, total } = props
+  const { footerClasses, classes, liked, activeStep, steps, handleBack, handleNext, total, handleSpecialPackage } = props
   return (
     <footer className={footerClasses}>
       <div className={classes.container}>
@@ -75,13 +75,13 @@ function SpecialFooter(props) {
             ) : (
                 <div>
                   <div>
-                    <Button round variant="contained" color="pink" onClick={handleNext}>
+                    <Button round variant="contained" color="pink" onClick={() => handleSpecialPackage(true)}>
                       {activeStep === steps.length - 1 ? 'Finish' : 'Yes'}
                     </Button>
                     <Button
                       simple
                       color="pink"
-                      onClick={handleNext}
+                      onClick={() => handleSpecialPackage(false)}
                     > No, Thanks  </Button>
                   </div>
                 </div>
@@ -168,7 +168,7 @@ function ConfirmationFooter(props) {
 
 export default function Footer(props) {
   const classes = useStyles();
-  const { whiteFont, fixed, activeStep, steps, handleBack, handleReset, handleNext, total, liked, isStepOptional, handleSkip, handleCheckoutModal, handleReturn } = props;
+  const { whiteFont, fixed, activeStep, steps, handleBack, handleReset, handleNext, total, liked, isStepOptional, handleSkip, handleCheckoutModal, handleReturn, handleSpecialPackage } = props;
   const footerClasses = classNames({
     [classes.footer]: true,
     [classes.footerWhiteFont]: whiteFont,
@@ -196,6 +196,7 @@ export default function Footer(props) {
 
       {activeStep === 1 ?
         <SpecialFooter
+          handleSpecialPackage={handleSpecialPackage}
           footerClasses={footerClasses}
           classes={classes}
           // liked={liked}
@@ -203,7 +204,7 @@ export default function Footer(props) {
           steps={steps}
           handleBack={handleBack}
           handleNext={handleNext}
-          // total={total}
+        // total={total}
         /> : null
 
       }

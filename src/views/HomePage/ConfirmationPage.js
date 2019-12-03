@@ -26,6 +26,7 @@ export default function Confirmation(props) {
     getStepContent,
     activeStep,
     steps,
+    data,
     // images,
     handleBack,
     handleReset,
@@ -35,6 +36,9 @@ export default function Confirmation(props) {
     handleReturn,
     handleSelectedPage
   } = props;
+
+  console.log(data);
+
 
   return (
     <div>
@@ -67,19 +71,91 @@ export default function Confirmation(props) {
           </GridItem>
         </GridContainer>
         <GridContainer justify="center">
+
+
           <GridItem xs={12} sm={12} md={6}>
-            <GridContainer className={classes.headerLine}>
+            {
+              data.package.package.map(pack => (
+                <div>
+                  <GridContainer className={classes.headerLine}>
+
+                    <div>
+                      <span className={classes.icons}>
+                        <i className="fa fa-images" />
+                      </span>
+                      <span className={classes.title}>{pack.name}</span>
+                      <span>
+                        <Button simple color="pink" onClick={() => handleSelectedPage("viewPackage")}>
+                          View photos
+                    </Button>
+                      </span>
+                    </div>
+
+                  </GridContainer>
+
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      {
+                        pack.types.map(type => (
+                          <div>
+                            <span className={classes.faCheck}>
+                              <i class="fas fa-check"></i>
+                            </span>
+                            <span className={classes.title}>{type.quantity} x {type.name}</span>
+                          </div>
+                        ))
+                      }
+                    </GridItem>
+                  </GridContainer>
+
+                </div>
+              ))
+            }
+            {
+              data.specialPackage.selected ? 
+                <div>
+                  <GridContainer className={classes.headerLine}>
+                    <div>
+                      <span className={classes.icons}>
+                        <i className="fa fa-images" />
+                      </span>
+                      <span className={classes.title}>{data.specialPackage.name}</span>
+                    </div>
+                  </GridContainer>
+
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      {
+                        data.specialPackage.package.map(type => (
+                          <div>
+                            <span className={classes.faCheck}>
+                              <i class="fas fa-check"></i>
+                            </span>
+                            <span className={classes.title}>{type.quantity} x {type.name}</span>
+                          </div>
+                        ))
+                      }
+                    </GridItem>
+                  </GridContainer>
+
+                </div>
+              : null
+            }
+
+
+
+
+
+            {/* <GridContainer className={classes.headerLine}>
               <div>
                 <span className={classes.icons}>
                   <i className="fa fa-images" />
                 </span>
                 <span className={classes.title}>PACKAGE A</span>
                 <span>
-                  {/* <Link to={"/view-photos"}> */}
                     <Button simple color="pink" onClick={() => handleSelectedPage("viewPackage")}>
                       View photos
                     </Button>
-                  {/* </Link> */}
                 </span>
               </div>
             </GridContainer>
@@ -157,7 +233,7 @@ export default function Confirmation(props) {
                   <span className={classes.title}>5 x Digital Print</span>
                 </div>
               </GridItem>
-            </GridContainer>
+            </GridContainer>*/}
           </GridItem>
 
           <GridItem
@@ -193,7 +269,7 @@ export default function Confirmation(props) {
                       fullWidth
                       size={"lg"}
                       color="pink"
-                      // onClick={handleNext}
+                    // onClick={handleNext}
                     >
                       {" "}
                       Place Order{" "}
