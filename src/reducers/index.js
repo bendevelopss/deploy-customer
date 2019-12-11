@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-// import authReducer from './authReducer';
+import authReducer from './authReducer';
 // import accessReducer from './accessReducer';
 // import customerReducer from './customerReducer';
 // import userReducer from "./userReducer";
@@ -16,7 +16,7 @@ import { reducer as formReducer } from 'redux-form';
 
 
 const rootReducer = combineReducers({
-    // auth: authReducer,
+    auth: authReducer,
     // package: packageReducer,
     // access: accessReducer,
     // customer: customerReducer,

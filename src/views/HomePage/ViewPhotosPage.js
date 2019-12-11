@@ -93,7 +93,7 @@ export default function ViewPhotos(props) {
           absolute
           color="tr"
           fixed
-          rightLinks={<HeaderLinks />}
+          rightLinks={<HeaderLinks data={data}/>}
         // {...rest}
         />
         <div className={classes.container}>

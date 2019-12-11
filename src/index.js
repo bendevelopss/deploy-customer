@@ -15,6 +15,7 @@ import HomePage from "views/HomePage/HomePage";
 
 import store from './stores/config';
 import ViewPhotos from "views/HomePage/ViewPhotosPage";
+import App from "./App";
 
 let hist = createBrowserHistory();
 
@@ -24,12 +25,7 @@ const Customer = () => (
       <BrowserRouter>
         <Router history={hist}>
           <Switch>
-            <Route exact path="/" component={LoginPage} />
-            <Route exact path="/home-page" component={HomePage} />
-            <Route path="/landing-page" component={LandingPage} />
-            <Route path="/profile-page" component={ProfilePage} />
-            <Route path="/components" component={Components} />
-            <Route path="/view-photos" component={ViewPhotos} />
+            <App />
           </Switch>
         </Router>
       </BrowserRouter>

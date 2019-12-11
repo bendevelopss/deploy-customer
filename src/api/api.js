@@ -34,18 +34,31 @@ export function getData() {
                         { name: "Digital Print", quantity: 15 },
                     ],
                     selected: false
+                },
+                {
+                    name: "Package B",
+                    types: [
+                        { name: "Page Album", quantity: 5 },
+                        { name: "4R Photos", quantity: 10 },
+                        { name: "Digital Print", quantity: 15 },
+                    ],
+                    selected: false
                 }
             ]
         },
         specialPackage: {
-            name: "Special Package A",
-            selected: false,
             packageName: "Creative Session",
             packagePrice: 420,
             description: "",
-            package: [
-                {name: "5R Photos", quantity: 10},
-                {name: "Digital Print", quantity: 5},
+            packages: [
+                {
+                    selected: false,
+                    name: "Special Package A",
+                    types: [
+                        { name: "5R Photos", quantity: 10 },
+                        { name: "Digital Print", quantity: 5 },
+                    ]
+                }
 
             ],
             totalInvestment: [
@@ -54,11 +67,11 @@ export function getData() {
                 { name: "Ala Carte Products" }
             ],
             collection: [
-                { name: "10 Photos for 10 pages album" },
-                { name: "20 Photos for 4R loose print" },
-                { name: "10 Photos for 5R loose print" },
-                { name: "10 Photos for 10 digital print" },
-                { name: "20 photos for 15 pages album" }
+                { name: "10 pages album", quantity: 10 },
+                { name: "4R loose print", quantity: 20 },
+                { name: "5R loose print", quantity: 10 },
+                { name: "10 digital print", quantity: 10 },
+                { name: "15 pages album", quantity: 20 }
             ]
         },
         packageType: [

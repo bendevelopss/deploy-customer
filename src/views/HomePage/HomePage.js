@@ -184,7 +184,7 @@ export default function HomePage(props) {
 
   const handleSpecialPackage = (bool) => {
     const curImg = { ...images };
-    curImg.specialPackage.selected = bool;
+    curImg.specialPackage.packages[0].selected = bool;
     setImages(curImg);
     handleNext()
   }
@@ -207,7 +207,7 @@ export default function HomePage(props) {
         absolute
         color="tr"
         fixed
-        rightLinks={<HeaderLinks />}
+        rightLinks={<HeaderLinks data={images}/>}
         {...rest}
       />
 

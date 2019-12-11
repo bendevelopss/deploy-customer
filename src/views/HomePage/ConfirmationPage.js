@@ -46,7 +46,7 @@ export default function Confirmation(props) {
         absolute
         color="tr"
         fixed
-        rightLinks={<HeaderLinks />}
+        rightLinks={<HeaderLinks data={data}/>}
         {...rest}
       />
 

@@ -42,7 +42,7 @@ export default function SpecialPackage(props) {
                 absolute
                 color="tr"
                 fixed
-                rightLinks={<HeaderLinks />}
+                rightLinks={<HeaderLinks data={data}/>}
                 {...rest}
             />
 
