@@ -57,6 +57,8 @@ export function getData() {
                     types: [
                         { name: "5R Photos", quantity: 10 },
                         { name: "Digital Print", quantity: 5 },
+                        { name: "10 Pages Album", quantity: 20 },
+                        { name: "4R Loose Print", quantity: 8 },
                     ]
                 }
 
@@ -78,34 +80,34 @@ export function getData() {
             {
                 name: "album",
                 type: [
-                    { name: "10 pages" },
-                    { name: "15 pages" },
-                    { name: "20 pages" },
-                    { name: "30 pages" },
+                    { name: "10 pages", id: 1, selected: false },
+                    { name: "15 pages", id: 2, selected: false },
+                    { name: "20 pages", id: 3, selected: false },
+                    { name: "30 pages", id: 4, selected: false },
                 ]
             },
             {
                 name: "digital print",
                 type: [
-                    { name: "1 x 15 pages album" },
-                    { name: "10 x 4R photos" },
-                    { name: "10 x digital print" },
+                    { name: "15 pages album", quantity: 1, id: 5, selected: false },
+                    { name: "4R photos", quantity: 10, id: 6, selected: false },
+                    { name: "digital print", quantity: 10, id: 7, selected: false },
                 ]
             },
             {
                 name: "loose print",
                 type: [
-                    { name: "1 x 15 pages album" },
-                    { name: "10 x 4R photos" },
-                    { name: "10 x digital print" },
+                    { name: "15 pages album", quantity: 1, id: 8, selected: false },
+                    { name: "4R photos", quantity: 10, id: 9, selected: false },
+                    { name: "digital print", quantity: 10, id: 10, selected: false },
                 ]
             },
             {
                 name: "wall art",
                 type: [
-                    { name: "1 x 15 pages album" },
-                    { name: "10 x 4R photos" },
-                    { name: "10 x digital print" },
+                    { name: "15 pages album", quantity: 1, id: 11, selected: false },
+                    { name: "4R photos", quantity: 10, id: 12, selected: false },
+                    { name: "digital print", quantity: 10, id: 13, selected: false },
                 ]
             },
         ],

@@ -137,17 +137,30 @@ export default function HomePage(props) {
     else if (!checkoutModal) setCheckoutModal(true);
   };
 
-  const handleImageModal = (img, isSelected) => {
-    if (imageModal) {
-      if (img && isSelected !== undefined) {
+  const handleImageModal = (img, isSelected, packSelected) => {
+    console.log('====================================');
+    console.log(img, packSelected);
+    console.log('====================================');
+    if (imageModal && !packSelected ) {
+      console.log('A');
+      if (img && isSelected !== undefined ) {
         const curImg = { ...images };
         curImg.package.images[img.index].selected = isSelected;
         setImages(curImg);
         setSelectedImage(img)
       }
       setImageModal(false);
+    } else if (img === null && !isSelected && packSelected) {
+      console.log('B');
+      const curImg = { ...images };
+      if (curImg.packageType[packSelected.index].type[packSelected.index2].selected) {
+        curImg.packageType[packSelected.index].type[packSelected.index2].selected = false
+      } else curImg.packageType[packSelected.index].type[packSelected.index2].selected = true;
+
+      setImages(curImg);
     }
     else if (!imageModal) {
+      console.log('C');
       setImageModal(true);
       if (img) setSelectedImage(img)
     }
@@ -207,7 +220,7 @@ export default function HomePage(props) {
         absolute
         color="tr"
         fixed
-        rightLinks={<HeaderLinks data={images}/>}
+        rightLinks={<HeaderLinks data={images} />}
         {...rest}
       />
 

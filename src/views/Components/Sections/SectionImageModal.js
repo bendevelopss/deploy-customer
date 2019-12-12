@@ -81,10 +81,26 @@ export default function SectionImageModal(props) {
   };
 
   const [checked, setChecked] = React.useState([24, 22]);
+  const [newPackage, setNewPackage] = React.useState(null);
 
-  const handleToggle = value => {
+
+  const handleToggle = (e, type, value, index , index2) => {
+
+
+    const _pack = {
+      types: [{ ...type }],
+      package: "Package X",
+      selected: false
+    }
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
+
+    console.log('====================================');
+    console.log(e.target, type, packageType, _pack, index, index2);
+    console.log('====================================');
+
+    handleImageModal(null, false, {index: index, index2: index2})
+    setNewPackage(_pack)
 
     if (currentIndex === -1) {
       newChecked.push(value);
@@ -121,7 +137,7 @@ export default function SectionImageModal(props) {
                       Choose Photo Type
                     </Typography>
 
-                    {packageType ? packageType.map(type => (
+                    {packageType ? packageType.map((type, index) => (
                       <ExpansionPanel
                         expanded={expanded === type.name}
                         onChange={handleChange(type.name)}
@@ -137,7 +153,7 @@ export default function SectionImageModal(props) {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <GridItem>
-                            {type.type ? type.type.map(e => (
+                            {type.type ? type.type.map((p_type, index2) => (
                               <div>
                                 <div
                                   className={
@@ -149,17 +165,20 @@ export default function SectionImageModal(props) {
                                     control={
                                       <Checkbox
                                         tabIndex={-1}
-                                        onClick={() => handleToggle(21)}
+                                        onClick={(e) => handleToggle(e, p_type, 21, index, index2)}
                                         checkedIcon={<Check className={classes.checkedIcon} />}
                                         icon={<Check className={classes.uncheckedIcon} />}
+                                        // checked={}
                                         classes={{
                                           checked: classes.checked,
                                           root: classes.checkRoot
                                         }}
+                                        
                                       />
                                     }
                                     classes={{ label: classes.label, root: classes.labelRoot }}
-                                    label={e.name}
+                                    label={p_type.name && p_type.quantity ? `${p_type.quantity} x ${p_type.name}` : p_type.name}
+                                    key={p_type.id}
                                   />
                                 </div>
                               </div>
@@ -175,7 +194,7 @@ export default function SectionImageModal(props) {
                           round
                           disabled={total <= 9 ? false : true}
                           color="pink"
-                          onClick={() => total <= 9 ? handleImageModal(selectedImage, true) : null}
+                          onClick={() => total <= 9 ? handleImageModal(selectedImage, true,) : null}
                         >
                           Done
                         </Button>
