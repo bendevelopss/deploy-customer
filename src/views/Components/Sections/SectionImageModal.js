@@ -27,6 +27,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styles from "assets/jss/material-kit-react/views/componentsSections/carouselStyle.js";
 import { pinkColor, successColor } from "assets/jss/material-kit-react";
 import { FormControlLabel } from "@material-ui/core";
+import { constant } from "../../../config";
 
 const useStyles = makeStyles(styles);
 
@@ -69,7 +70,7 @@ const useStyles2 = makeStyles(theme => ({
 
 
 export default function SectionImageModal(props) {
-  const { selectedImage, handleImageModal, packageType, total } = props;
+  const { selectedImage, handleImageModal, packageType, total, product, packages } = props;
   const sectionClass = useStyles2();
   const settings = {
     dots: false,
@@ -82,32 +83,51 @@ export default function SectionImageModal(props) {
 
   const [checked, setChecked] = React.useState([24, 22]);
   const [newPackage, setNewPackage] = React.useState(null);
+  const [newProductType, setNewProductType] = React.useState([]);
 
 
-  const handleToggle = (e, type, value, index , index2) => {
+  console.log('====================================');
+  console.log(product, selectedImage, packages);
+  console.log('====================================');
 
 
-    const _pack = {
-      types: [{ ...type }],
-      package: "Package X",
-      selected: false
-    }
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const handleToggle = (e, data, value, index, index2) => {
 
+
+    // const _pack = {
+    //   types: [{ ...type }],
+    //   package: "Package X",
+    //   selected: false
+    // }
+    // const currentIndex = checked.indexOf(value);
+    // const newChecked = [...checked];
+    let obj = []
+    obj.push(...newProductType)
     console.log('====================================');
-    console.log(e.target, type, packageType, _pack, index, index2);
+    console.log(e.target, data, index, index2, obj);
     console.log('====================================');
-
-    handleImageModal(null, false, {index: index, index2: index2})
-    setNewPackage(_pack)
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
+    const checked = e.target.checked
+    if (checked) {
+      obj.push(data)
     } else {
-      newChecked.splice(currentIndex, 1);
+      const foundIndex = obj.findIndex((el) => (el.product_type_id === data.product_type_id));
+      obj.splice(foundIndex, 1)
     }
-    setChecked(newChecked);
+
+    console.log(obj);
+    
+
+    setNewProductType(obj)
+
+    // handleImageModal(null, false, { index: index, index2: index2 })
+    // setNewPackage(_pack)
+
+    // if (currentIndex === -1) {
+    //   newChecked.push(value);
+    // } else {
+    //   newChecked.splice(currentIndex, 1);
+    // }
+    // setChecked(newChecked);
   };
 
   const classes = useStyles();
@@ -116,6 +136,21 @@ export default function SectionImageModal(props) {
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  const checkPhoto = (url) => {
+    if (url !== undefined || url !== null)
+      return true;
+    return false;
+  }
+
+  const duplicateCheck = (objs, key) => {
+    let occ = {}
+    objs.filter(function (x) {
+      if (occ[x.key]) return false;
+      occ[x.key] = true;
+      return true;
+    })
+  }
 
   return (
     <div>
@@ -127,9 +162,10 @@ export default function SectionImageModal(props) {
               <div>
                 <GridContainer justify="center">
                   <img
-                    src={selectedImage ? selectedImage.src : null}
-                    alt="First slide"
-                    style={{ width: "50%" }}
+                    src={selectedImage ? `${constant.imgUrl}` + selectedImage.name : null}
+                    // src={checkPhoto(selectedImage.src) ? `${constant.imgUrl}` + selectedImage.src : null}
+                    alt={selectedImage ? selectedImage.src : "Your Image"}
+                    style={{ width: "15vw" }}
                   />
                   <div className={sectionClass.root}>
                     <h4 className={sectionClass.header}>{selectedImage ? selectedImage.name : null}</h4>
@@ -137,10 +173,10 @@ export default function SectionImageModal(props) {
                       Choose Photo Type
                     </Typography>
 
-                    {packageType ? packageType.map((type, index) => (
+                    {packages && !packages.hidden && packages.item.length > 0 ? packages.item.map((type, index) => (
                       <ExpansionPanel
-                        expanded={expanded === type.name}
-                        onChange={handleChange(type.name)}
+                        expanded={expanded === type.product_id}
+                        onChange={handleChange(type.product_id)}
                       >
                         <ExpansionPanelSummary
                           expandIcon={<ExpandMoreIcon />}
@@ -148,41 +184,41 @@ export default function SectionImageModal(props) {
                           id="panel1bh-header"
                         >
                           <Typography className={sectionClass.heading}>
-                            For {type.name}
+                            For {type.product_type}
                           </Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <GridItem>
-                            {type.type ? type.type.map((p_type, index2) => (
-                              <div>
-                                <div
-                                  className={
-                                    classes.checkboxAndRadio,
-                                    classes.checkboxAndRadioHorizontal
+
+                            <div>
+                              <div
+                                className={
+                                  classes.checkboxAndRadio,
+                                  classes.checkboxAndRadioHorizontal
+                                }
+                              >
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      tabIndex={-1}
+                                      onChange={(e) => handleToggle(e, type, 21)}
+                                      checkedIcon={<Check className={classes.checkedIcon} />}
+                                      icon={<Check className={classes.uncheckedIcon} />}
+                                      // checked={}
+                                      classes={{
+                                        checked: classes.checked,
+                                        root: classes.checkRoot
+                                      }}
+
+                                    />
                                   }
-                                >
-                                  <FormControlLabel
-                                    control={
-                                      <Checkbox
-                                        tabIndex={-1}
-                                        onClick={(e) => handleToggle(e, p_type, 21, index, index2)}
-                                        checkedIcon={<Check className={classes.checkedIcon} />}
-                                        icon={<Check className={classes.uncheckedIcon} />}
-                                        // checked={}
-                                        classes={{
-                                          checked: classes.checked,
-                                          root: classes.checkRoot
-                                        }}
-                                        
-                                      />
-                                    }
-                                    classes={{ label: classes.label, root: classes.labelRoot }}
-                                    label={p_type.name && p_type.quantity ? `${p_type.quantity} x ${p_type.name}` : p_type.name}
-                                    key={p_type.id}
-                                  />
-                                </div>
+                                  classes={{ label: classes.label, root: classes.labelRoot }}
+                                  label={type.product_name}
+                                  key={type.product_id}
+                                />
                               </div>
-                            )) : null}
+                            </div>
+                            {/* )) : null} */}
                           </GridItem>
                         </ExpansionPanelDetails>
                       </ExpansionPanel>
@@ -194,7 +230,7 @@ export default function SectionImageModal(props) {
                           round
                           disabled={total <= 9 ? false : true}
                           color="pink"
-                          onClick={() => total <= 9 ? handleImageModal(selectedImage, true,) : null}
+                          onClick={() => total <= 9 ? handleImageModal(selectedImage, true, "done", newProductType) : null}
                         >
                           Done
                         </Button>

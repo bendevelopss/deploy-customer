@@ -129,7 +129,7 @@ function MainContainer(props) {
 
     return (
         <div>
-            {/* {
+            {
                 !isAuthenticated ?
                     <div>
                         <Route exact path="/" component={LoginPage} />
@@ -147,14 +147,14 @@ function MainContainer(props) {
                         <Route path="/view-photos" component={ViewPhotos} />
                     </div>
                     :  null
-            } */}
+            }
 
-                    <Route exact path="/" component={LoginPage} />
+                    {/* <Route exact path="/" component={LoginPage} />
                         <Route exact path="/home-page" component={HomePage} />
                         <Route path="/landing-page" component={LandingPage} />
                         <Route path="/profile-page" component={ProfilePage} />
                         <Route path="/components" component={Components} />
-                        <Route path="/view-photos" component={ViewPhotos} />
+                        <Route path="/view-photos" component={ViewPhotos} /> */}
 
             {/* {/* {!isAuthenticated && this.props.location.pathname !== "/login" ?
                     <Route component={NoMatch} />

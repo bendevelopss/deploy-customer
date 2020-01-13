@@ -55,17 +55,17 @@ function FavoriteFooter(props) {
 }
 
 function SpecialFooter(props) {
-  const { footerClasses, classes, liked, activeStep, steps, handleBack, handleNext, total, handleSpecialPackage } = props
+  const { footerClasses, classes, liked, activeStep, steps, handleBack, handleNext, total, handleSpecialPackage, specialPackage } = props
   return (
     <footer className={footerClasses}>
       <div className={classes.container}>
-        <div className={classes.left}>
+        {specialPackage ? <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
               <h3>Will you avail this Special Package?</h3>
             </ListItem>
           </List>
-        </div>
+        </div> : null}
         {steps ?
           <div className={classes.right}>
             {activeStep === steps.length ? (
@@ -76,11 +76,12 @@ function SpecialFooter(props) {
                 <div>
                   <div>
                     <Button round variant="contained" color="pink" onClick={() => handleSpecialPackage(true)}>
-                      {activeStep === steps.length - 1 ? 'Finish' : 'Yes'}
+                      {specialPackage ? 'Yes' : 'Next'}
                     </Button>
                     <Button
                       simple
                       color="pink"
+                      style={{ display: specialPackage ? "" : "none" }}
                       onClick={() => handleSpecialPackage(false)}
                     > No, Thanks  </Button>
                   </div>
@@ -168,7 +169,7 @@ function ConfirmationFooter(props) {
 
 export default function Footer(props) {
   const classes = useStyles();
-  const { whiteFont, fixed, activeStep, steps, handleBack, handleReset, handleNext, total, liked, isStepOptional, handleSkip, handleCheckoutModal, handleReturn, handleSpecialPackage } = props;
+  const { whiteFont, fixed, activeStep, steps, handleBack, specialPackage, handleReset, handleNext, total, liked, isStepOptional, handleSkip, handleCheckoutModal, handleReturn, handleSpecialPackage } = props;
   const footerClasses = classNames({
     [classes.footer]: true,
     [classes.footerWhiteFont]: whiteFont,
@@ -199,6 +200,7 @@ export default function Footer(props) {
           handleSpecialPackage={handleSpecialPackage}
           footerClasses={footerClasses}
           classes={classes}
+          specialPackage={specialPackage}
           // liked={liked}
           activeStep={activeStep}
           steps={steps}

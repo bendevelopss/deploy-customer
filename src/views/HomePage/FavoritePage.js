@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
+import Cookies from 'universal-cookie';
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -20,17 +21,22 @@ import Card from "components/Card/Card";
 // import StepperComponent from "./HomePage";
 import { pinkColor } from "assets/jss/material-kit-react";
 import { Stepper, Step, StepLabel } from "@material-ui/core";
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as authActions from '../../actions/gallery';
 
 
 import StepperComponent from "./StepperComponent"
+import { constant } from "config";
 
-export default function FavoritePhoto(props) {
+function FavoritePhoto(props) {
     const {
         rest,
         classes,
         activeStep,
         steps,
-        data,
+        // data,
         navImageClasses,
         handleDoubleClick,
         handleBack,
@@ -38,8 +44,28 @@ export default function FavoritePhoto(props) {
         handleNext,
         isStepOptional,
         handleSkip,
-        handleReturn
+        handleReturn,
+        photos
     } = props;
+
+    const cookies = new Cookies();
+    const _customer = cookies.get('customer');
+
+    const checkPhoto = (url) => {
+        if (url != 'undefined' || url != null)
+            return true;
+        return false;
+    }
+
+    // useEffect(() => {
+    //     props.action.fetchGalleryDetail(_customer.gallery_id)
+    //     props.action.fetchGalleryPhotos(_customer.gallery_id)
+
+    // }, [])
+
+    console.log('====================================');
+    console.log(photos);
+    console.log('====================================');
 
     return (
         <div>
@@ -58,19 +84,24 @@ export default function FavoritePhoto(props) {
                     </GridItem>
                 </GridContainer>
                 <GridContainer justify="center" spacing={4}>
-                {data.package.images.length > 0 ? data.package.images.map(img => (
+                    {/* {data.package.images.length > 0 ? data.package.images.map(img => ( */}
+
+                    {photos !== null && photos.length > 0 ? photos.map((img, i) => (
                         <GridItem xs={12} sm={6} md={4} lg={3} spacing={4}>
 
                             <Card>
                                 <div>
                                     <img
                                         alt="..."
-                                        src={img.image}
+                                        // src={img.image}
+                                        src={checkPhoto(img.photo_thumbnail_url) ? `${constant.imgUrl}` + img.photo_thumbnail_url : null}
                                         className={navImageClasses}
-                                        onDoubleClick={() => handleDoubleClick(img)}
+                                        onDoubleClick={() => handleDoubleClick(img, i)}
                                     />
+                                    {/* <img title="Click image to view original quality" src={checkPhoto(img.photo_thumbnail_url) ? `${constant.imgUrl}` + img.photo_thumbnail_url: defaultPhoto}/> */}
+                                    {/* <img src={this.checkPhoto(firstPhoto) && firstPhoto.length > 0 ? `${constant.imgUrl}` + firstPhoto : defaultPhoto} /> */}
                                     <div className={classes.imgText}>
-                                    Like Photo   <Button simple onClick={() => handleDoubleClick(img)}>
+                                        Like Photo   <Button simple onClick={() => handleDoubleClick(img, i)}>
                                             {img.favorite ?
                                                 <Favorite className={classes.icons} />
                                                 : <FavoriteBorderIcon className={classes.icons} />}
@@ -81,7 +112,7 @@ export default function FavoritePhoto(props) {
                             </Card>
                         </GridItem>
 
-                    )) : null
+                    )) : <h3 className={classes.dark}> No Photos Available </h3>
                     }
 
                 </GridContainer>
@@ -94,8 +125,8 @@ export default function FavoritePhoto(props) {
                 handleBack={handleBack}
                 handleReset={handleReset}
                 handleNext={handleNext}
-                total={data.package.images.length}
-                liked={Object.values(data.package.images).reduce((a, { favorite }) => a + favorite, 0)}
+                total={photos ? photos.length : 0}
+                liked={photos ? Object.values(photos).reduce((a, { favorite }) => a + favorite, 0) : 0}
                 isStepOptional={isStepOptional}
                 handleSkip={handleSkip}
             />
@@ -103,3 +134,20 @@ export default function FavoritePhoto(props) {
         </div>
     );
 }
+
+const mapStateToProps = function (state) {
+    console.log(state);
+    return {
+        error: state.auth ? state.auth.error.response : null,
+        // photos: state.gallery ? state.gallery.listPhotos.data : null
+        // loggedIn: state.auth.loggedIn
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        // action: bindActionCreators({ ...authActions }, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FavoritePhoto);

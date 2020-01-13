@@ -42,13 +42,13 @@ export default function Confirmation(props) {
 
   return (
     <div>
-      <Header
+      {/* <Header
         absolute
         color="tr"
         fixed
         rightLinks={<HeaderLinks data={data}/>}
         {...rest}
-      />
+      /> */}
 
       <div className={classes.container}>
         <GridContainer justify="center">

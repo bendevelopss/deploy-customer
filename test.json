@@ -1,0 +1,277 @@
+order:[
+    {
+        order_id: 1 //order_details requirement
+        start_date: '2019-08-09'
+        end_date: '2019-08-14'
+        status: 'process'
+        customer:{
+            customer_id: 12
+            customer_name: concat(first_name, ' ', last_name)
+            address_1: 'Mnl'
+        }
+        order_details:[
+        0: {
+            order_detail_id:1 //order_details requirement
+            package:{
+                package_id:12 //order_details requirement
+                package_name: 'Test Package' 
+                package_price: 400 //order_details requirement
+                special_package_flag: false
+                status: 'active'
+                package_details:{
+                    package_id: 12
+                    product:{
+                        product_id:2 //
+                        product_name: 'Portrait'
+                        unit_cost: 500
+                        quantity: 1
+                        product_type:{
+                            product_type_id: 2
+                            product_tye: 'Digital'
+                        }
+						order_photo_details:[
+							0:{order_detail_id:1,photo_id: 21}
+							1:{order_detail_id:1,photo_id: 23}
+							2:{order_detail_id:1,photo_id: 24}
+							3:{order_detail_id:1,photo_id: 25}
+						]
+                    }
+                }
+            }
+        }
+        1: {
+            order_detail_id:2 //order_details requirement
+            package:{
+                package_id:12 //order_details requirement
+                package_name: 'Test Package' 
+                package_price: 400 //order_details requirement
+                special_package_flag: false
+                status: 'active'
+                package_details:{
+                    package_id: 12
+                    product:{
+                        product_id:3 //
+                        product_name: 'Outside'
+                        unit_cost: 500
+                        quantity: 1
+                        product_type:{
+                            product_type_id: 3
+                            product_tye: 'Paper'
+                        }
+						order_photo_details:[
+							0:{order_detail_id:1,photo_id: 1}
+							1:{order_detail_id:1,photo_id: 3}
+							2:{order_detail_id:1,photo_id: 4}
+							3:{order_detail_id:1,photo_id: 5}
+						]
+                    }
+                }
+            }
+        }
+        2:{
+            order_detail_id:3 //order_details requirement
+            package:{
+                package_id:12 //order_details requirement
+                package_name: 'Test Package' 
+                package_price: 400 //order_details requirement
+                special_package_flag: false
+                status: 'active'
+                package_details:{
+                    package_id: 12
+                    product:{
+                        product_id:1 //
+                        product_name: 'Studio'
+                        unit_cost: 1500
+                        quantity: 1
+                        product_type:{
+                            product_type_id: 1
+                            product_tye: 'Album'
+                        }
+                        order_photo_details:[
+							0:{order_detail_id:1,photo_id: 11}
+							1:{order_detail_id:1,photo_id: 31}
+							2:{order_detail_id:1,photo_id: 41}
+							3:{order_detail_id:1,photo_id: 51}
+						]
+                    }
+                }
+            }
+        }]
+    }
+]anonymous {
+ 
+    package_id: 7,
+    package_name: 'Test Package',
+    package_price: '1000',
+    special_package: false,
+    product_id: 1,
+    product_name: 'Portrait',
+    product_type: 'Album',
+    unit_cost: '500',
+    photo_id: [ 272, 304, 308, 215, 262, 324, 264, 268, 322, 325 ],
+    thumbnail:
+     [ '1564048440335-thumbnail.jpg',
+       '1564393764111-thumbnail.jpg',
+       '1564469860089-thumbnail.jpg',
+       '1563965707184-thumbnail.jpg',
+       '1564043518184-thumbnail.jpg',
+       '1564481341321-thumbnail.jpg',
+       '1564044853864-thumbnail.jpg',
+       '1564047523488-thumbnail.jpg',
+       '1564481266225-thumbnail.jpg',
+       null ],
+    photo_url:
+     [ '1564048345497.jpg',
+       '1564393764114.jpg',
+       '1564469860141.jpg',
+       '1563965707221.jpg',
+       '1564043518198.jpeg',
+       '1564481341353.jpg',
+       '1564044853868.jpg',
+       '1564047523494.jpg',
+       null,
+       null ] }
+  anonymous {
+    customer_name: 'edward turner',
+    email: 'j@j.com',
+    address: 'Elm st 123 st',
+    phone_number: '907865',
+    package_id: 7,
+    package_name: 'Test Package',
+    package_price: '1000',
+    special_package: false,
+    product_id: 2,
+    product_name: 'test',
+    product_type: 'Digital',
+    unit_cost: '500',
+    photo_id: [ 167, 215, 268, 236, 242, 244, 245, 247, 243, 246 ],
+    thumbnail:
+     [ '1563947011009-thumbnail.jpg',
+       '1563965707184-thumbnail.jpg',
+       '1564047523488-thumbnail.jpg',
+       '1563972338732-thumbnail.jpg',
+       '1563972381432-thumbnail.jpg',
+       '1563972381434-thumbnail.jpg',
+       '1563972390342-thumbnail.jpg',
+       '1563972444000-thumbnail.jpg',
+       '1563972381428-thumbnail.jpg',
+       '1563972405847-thumbnail.jpg' ],
+    photo_url:
+     [ '1563947011014.jpg',
+       '1563965707221.jpg',
+       '1564047523494.jpg',
+       '1563972338733.jpg',
+       '1563972381435.jpg',
+       '1563972381436.jpg',
+       '1563972390344.jpg',
+       '1563946686374.jpg',
+       '1563972381430.jpg',
+       '1563972405848.jpg' ] }
+  anonymous {
+    customer_name: 'edward turner',
+    email: 'j@j.com',
+    address: 'Elm st 123 st',
+    phone_number: '907865',
+    package_id: 7,
+    package_name: 'Test Package',
+    package_price: '1000',
+    special_package: false,
+    product_id: 3,
+    product_name: 'shoe',
+    product_type: 'Paper',
+    unit_cost: '20',
+    photo_id: [ 244, 248, 245, 246, 161, 247, 236, 242, 243, 268 ],
+    thumbnail:
+     [ '1563972381434-thumbnail.jpg',
+       '1563972520619-thumbnail.jpg',
+       '1563972390342-thumbnail.jpg',
+       '1563972405847-thumbnail.jpg',
+       '1563946686372-thumbnail.jpg',
+       '1563972444000-thumbnail.jpg',
+       '1563972338732-thumbnail.jpg',
+       '1563972381432-thumbnail.jpg',
+       '1563972381428-thumbnail.jpg',
+       '1564047523488-thumbnail.jpg' ],
+    photo_url:
+     [ '1563972381436.jpg',
+       '1563972520621.jpg',
+       '1563972390344.jpg',
+       '1563972405848.jpg',
+       '1563946686374.jpg',
+       '1563946686374.jpg',
+       '1563972338733.jpg',
+       '1563972381435.jpg',
+       '1563972381430.jpg',
+       '1564047523494.jpg' ] }
+
+
+  anonymous {
+    customer_name: 'edward turner',
+    email: 'j@j.com',
+    address: 'Elm st 123 st',
+    phone_number: '907865',
+    package_id: null,
+    package_name: null,
+    package_price: null,
+    special_package: null,
+    product_id: 2,
+    product_name: 'test',
+    product_type: 'Digital',
+    unit_cost: '500',
+    photo_id: [ 304, 215, 262 ],
+    thumbnail:
+     [ '1564393764111-thumbnail.jpg',
+       '1563965707184-thumbnail.jpg',
+       '1564043518184-thumbnail.jpg' ],
+    photo_url:
+        [ '1564393764114.jpg',
+       '1563965707221.jpg',
+       '1564043518198.jpeg' ] }
+  [ [ { package_id: 7,
+        package_name: 'Test Package',
+        package_price: '1000',
+        special_package: false,
+        product_id: 1,
+        product_name: 'Portrait',
+        product_type: 'Album',
+        unit_cost: '500',
+        photos: [Object] } ] ]
+
+
+package:{
+    package_id:1,
+    package_name: 'xx'
+    products:[{product_1,product_2,product_3}]
+}
+product:{ //additiional items
+    product:[product_4]
+}
+
+
+
+[ { '0':
+    { package_id: 7,
+      product_id: 1,
+      product_name: 'Portrait',
+      product_type: 'Album',
+      unit_cost: '500',
+      photos: [Object] },
+   '1':
+    { package_id: 7,
+      product_id: 2,
+      product_name: 'test',
+      product_type: 'Digital',
+      unit_cost: '500',
+      photos: [Object] },
+   '2':
+    { package_id: 7,
+      product_id: 3,
+      product_name: 'shoe',
+      product_type: 'Paper',
+      unit_cost: '20',
+      photos: [Object] },
+   package_name: 'Test Package',
+   status: undefined,
+   package_id: 7,
+   special_package_flag: undefined,
+   package_price: '1000' } ]

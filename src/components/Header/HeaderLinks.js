@@ -57,22 +57,132 @@ function Menu() {
   })
 }
 
+function SpecialComponent(props) {
+  const classes = useStyles();
+  return (
+    <div>
+      <li>
+        <h6 className={classes.dropdownLink}>SPECIAL PACKAGE</h6>
+        <h6 className={classes.dropdownLink}>
+          {/* {pk.name} */}
+          <small style={{ float: "right" }}>At Hand</small>
+          <small style={{ float: "right", marginRight: 10 }}>Qty</small>
+        </h6>
+      </li>
+      {props.specialPackage.item.map(pr => {
+        return (
+          <li>
+            <p className={classes.dropdownLink}>
+              {pr.product_name}
+              <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{pr.quantity}</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{pr.quantity}</text>
+            </p>
+          </li>
+        )
+      })}
+    </div>
+  )
+}
+
+function PackageComponent(props) {
+  const classes = useStyles();
+  return (
+    <div>
+      <li>
+        <h6 className={classes.dropdownLink}>PACKAGE</h6>
+        <h6 className={classes.dropdownLink}>
+          {/* {props.packages.name} */}
+          <small style={{ float: "right" }}>At Hand</small>
+          <small style={{ float: "right", marginRight: 10 }}>Qty</small>
+        </h6>
+      </li>
+      {props.packages && props.packages.product.length > 0 ? props.packages.product.map(_pack => {
+        return (
+          <li>
+            <p className={classes.dropdownLink}>
+              {_pack.product_name}
+              <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{_pack.quantity}</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.quantity}</text>
+            </p>
+          </li>
+        )
+      })
+        : null
+      }
+    </div>
+  )
+}
+
+function Dropdown(props) {
+  const classes = useStyles();
+
+  console.log('====================================');
+  console.log(props.specialPackage);
+  console.log('====================================');
+  return (
+    // specialPackage && specialPackage.length > 0 ? specialPackage.filter(x => x.selected).map((pk, i) => {
+
+    // package || special_package ? {
+    // return (
+    <div>
+      <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
+
+        {/* <li>
+                      <h6 className={classes.dropdownLink}>SPECIAL PACKAGE</h6>
+                      <h6 className={classes.dropdownLink}>
+                        {pk.name}
+                        <small style={{ float: "right" }}>At Hand</small>
+                        <small style={{ float: "right", marginRight: 10 }}>Qty</small>
+                      </h6>
+                    </li>
+                    {pk.item.map(pr => {
+                      return (
+                        <li>
+                          <p className={classes.dropdownLink}>
+                            {pr.product_name}
+                            <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{pr.quantity}</text>
+                            <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{pr.quantity}</text>
+                          </p>
+                        </li>
+                      )
+                    })} */}
+
+        {props.specialPackage && props.specialPackage.item.length > 0 && props.specialPackage.selected ?
+          <SpecialComponent {...props} />
+          : null
+        }
+
+        {props.packages && props.packages.product.length > 0 ?
+          <PackageComponent {...props} />
+          : null
+        }
+
+
+
+      </ul>
+    </div>
+  )
+  // }) : null
+  // )
+}
+
 
 export default function HeaderLinks(props) {
- 
-  const { data } = props;
-  const { specialPackage } = data
 
-  const _packages = [...data.package.package, ...specialPackage.packages]
+  const { data, customer, specialPackage, packages } = props;
+  // const { specialPackage } = data
+
+  // const _specialPackage = specialPackage ? [specialPackage] : []
 
   console.log('====================================');
-  console.log( _packages, props);
+  console.log(props, specialPackage, packages);
   console.log('====================================');
   const classes = useStyles();
+
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
-        <h6 color="transparent" className={classes.headerText}>{data ? data.customer.email : ""}</h6>
+        <h6 color="transparent" className={classes.headerText}>{customer ? customer.email : ""}</h6>
       </ListItem>
       <ListItem className={classes.listItem}>
         <CustomDropdown
@@ -84,41 +194,7 @@ export default function HeaderLinks(props) {
             color: "transparent"
           }}
           dropdownList={
-            _packages.filter(x => x.selected).map((pk, i) => {
-              return (
-                <div>
-                  <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
-                    <li>
-                      <h6 className={classes.dropdownLink}>
-                        {pk.name}<small style={{ float: "right" }}>Quantity</small>
-                      </h6>
-                    </li>
-                    {pk.types.map(pr => {
-                      return (
-                        <li>
-                          <p className={classes.dropdownLink}>
-                            {pr.name}
-                            <text style={{ float: "right", color: "#F74380" }}>{pr.quantity}</text>
-                          </p>
-                        </li>
-                      )
-                    })}
-
-                    {/* {specialPackage.package.types.map(sp => {
-                      return (
-                        <li>
-                          <p className={classes.dropdownLink}>
-                            {sp.name}
-                            <text style={{ float: "right", color: "#F74380" }}>{sp.quantity}</text>
-                          </p>
-                        </li>
-                      )
-                    })} */}
-
-                  </ul>
-                </div>
-              )
-            })
+            [<Dropdown {...props} />]
           }
           buttonIcon={ShoppingCart}
 

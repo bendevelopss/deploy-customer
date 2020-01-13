@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 import classNames from "classnames";
+import Cookies from 'universal-cookie';
 
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
@@ -60,6 +61,17 @@ import ViewPhotos from "./ViewPhotosPage";
 import EditPackage from "./EditPackagePage";
 import { getData } from "api/api";
 
+import { constant } from "config";
+
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as authActions from '../../actions/gallery';
+import * as productActions from '../../actions/product';
+import * as packageActions from '../../actions/package';
+
+
+
 const useStyles = makeStyles(styles);
 
 function getSteps() {
@@ -72,7 +84,7 @@ function getSteps() {
   ];
 }
 
-export default function HomePage(props) {
+function HomePage(props) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   const [activeStep, setActiveStep] = React.useState(0);
   const [click, setClick] = React.useState(false);
@@ -82,6 +94,19 @@ export default function HomePage(props) {
   const [imageModal, setImageModal] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [selectedPage, setSelectedPage] = React.useState("");
+  const [photos, setPhotos] = React.useState(null);
+  const [product, setProduct] = React.useState(null);
+  const [packages, setPackage] = React.useState(null);
+  const [newPackage, setNewPackage] = React.useState(null);
+  const [special_packages, setSpecialPackage] = React.useState(null);
+
+
+  const cookies = new Cookies();
+  const _customer = cookies.get('customer');
+
+  console.log('====================================');
+  console.log(_customer);
+  console.log('====================================');
 
   const steps = getSteps();
 
@@ -93,13 +118,10 @@ export default function HomePage(props) {
     return skipped.has(step);
   };
 
-  const handleDoubleClick = img => {
-    const curImg = { ...images };
-
-    if (img.favorite) curImg.package.images[img.index].favorite = false;
-    else curImg.package.images[img.index].favorite = true;
-
-    setImages(curImg);
+  const handleDoubleClick = (img, i) => {
+    const curImg = [...photos];
+    curImg[i].favorite = !curImg[i].favorite
+    setPhotos(curImg);
   };
 
   // const handlePhotoSelection = (img, isSelected) => {
@@ -112,6 +134,9 @@ export default function HomePage(props) {
   // };
 
   const handleSelectPhoto = (img, condition, isSelected) => {
+    console.log('====================================');
+    console.log(img, condition, isSelected);
+    console.log('====================================');
     if (img) handleImageModal(img, condition, isSelected)
     else return
   };
@@ -133,42 +158,113 @@ export default function HomePage(props) {
   };
 
   const handleCheckoutModal = () => {
-    if (checkoutModal) setCheckoutModal(false);
-    else if (!checkoutModal) setCheckoutModal(true);
+    setCheckoutModal(!checkoutModal);
+    // else if (!checkoutModal) setCheckoutModal(true);
   };
 
-  const handleImageModal = (img, isSelected, packSelected) => {
+  const handleImageModal = (img, isSelected, packSelected, productType) => {
     console.log('====================================');
-    console.log(img, packSelected);
+    console.log(imageModal, img, isSelected, packSelected, productType);
     console.log('====================================');
-    if (imageModal && !packSelected ) {
-      console.log('A');
-      if (img && isSelected !== undefined ) {
-        const curImg = { ...images };
-        curImg.package.images[img.index].selected = isSelected;
+    if (imageModal) {
+      if (img && isSelected !== undefined) {
+        const curImg = [...photos];
+        curImg[img.index].selected = isSelected;
         setImages(curImg);
         setSelectedImage(img)
       }
       setImageModal(false);
     } else if (img === null && !isSelected && packSelected) {
-      console.log('B');
-      const curImg = { ...images };
+      const curImg = [...photos];
       if (curImg.packageType[packSelected.index].type[packSelected.index2].selected) {
         curImg.packageType[packSelected.index].type[packSelected.index2].selected = false
       } else curImg.packageType[packSelected.index].type[packSelected.index2].selected = true;
 
       setImages(curImg);
-    }
-    else if (!imageModal) {
-      console.log('C');
+    } else if (!imageModal) {
       setImageModal(true);
       if (img) setSelectedImage(img)
+    }
+    if (packSelected === "done") {
+      const _pack = {
+        package_name: packages.package_name,
+        status: packages.status,
+        package_id: packages.package_id,
+        special_package_flag: packages.special_package_flag,
+        package_price: packages.package_price,
+        hidden: packages.hidden,
+        product: []
+      }
+
+      _pack.product.push(...productType)
+      const _package = [];
+      const newProductType = []
+
+      // console.log(_pack);
+      // newProductType.push(productType)
+      // _package.push(..._pack)
+      // _package.product = []
+      // _package.product.push(...newProductType)
+      
+      console.log('====================================');
+      console.log(_pack);
+      console.log('====================================');
+
+
+       setNewPackage(_pack)
     }
   };
 
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
+
+  const getPhotos = async () => {
+    if (props.images) {
+      const _photos = await props.images.gallery_photos
+      await _photos.forEach((element) => {
+        element.favorite = false;
+      });
+      await setPhotos(_photos)
+    }
+  }
+
+  const getProduct = async () => {
+    if (props.product) {
+      const _product = await props.product
+      await setProduct(_product)
+    } else console.log('HINDI PUMASOK')
+  }
+
+  const getPackage = async () => {
+    if (props.package) {
+      const _package = await props.package
+      await setPackage(_package)
+    } else console.log('HINDI PUMASOK')
+  }
+
+  const getSpecialPackage = async () => {
+    if (props.special_package) {
+      const _specialPackage = await props.special_package
+      _specialPackage.selected = false
+      await setSpecialPackage(_specialPackage)
+    } else console.log('HINDI PUMASOK')
+  }
+
+  useEffect(() => {
+    props.action.fetchGalleryDetail(_customer.gallery_id)
+    props.action.fetchGalleryPhotos(_customer.gallery_id)
+    props.action.fetchAllProduct()
+
+    if (_customer.package_id) {
+      props.action.fetchPackage(_customer.package_id)
+    }
+    if (_customer.special_package_id) {
+      props.action.fetchSpecialPackage(_customer.special_package_id)
+    }
+
+
+  }, [])
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
@@ -196,14 +292,18 @@ export default function HomePage(props) {
   };
 
   const handleSpecialPackage = (bool) => {
-    const curImg = { ...images };
-    curImg.specialPackage.packages[0].selected = bool;
-    setImages(curImg);
+    const curImg = special_packages;
+    curImg.selected = bool;
+    setSpecialPackage(curImg);
     handleNext()
   }
 
   setTimeout(function () {
     setCardAnimation("");
+    if (!photos) getPhotos();
+    if (!product) getProduct();
+    if (!packages) getPackage();
+    if (!special_packages) getSpecialPackage();
   }, 700);
   const classes = useStyles();
   const { ...rest } = props;
@@ -214,13 +314,17 @@ export default function HomePage(props) {
   );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
+  console.log('====================================');
+  console.log(props);
+  console.log('====================================');
+
   return (
     <div>
       <Header
         absolute
         color="tr"
         fixed
-        rightLinks={<HeaderLinks data={images} />}
+        rightLinks={<HeaderLinks customer={_customer} specialPackage={special_packages} packages={newPackage} />}
         {...rest}
       />
 
@@ -238,7 +342,8 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            data={images}
+            // data={images}
+            photos={photos}
             // images={images.package.images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
@@ -257,8 +362,9 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
+            specialPackage={special_packages ? special_packages : null}
             // images={images.package.images}
-            data={images}
+            // data={images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}
@@ -277,8 +383,11 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            // images={images.package.images}
-            data={images}
+            photos={photos}
+            // data={images}
+            package={packages}
+            product={product}
+            packages={packages}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}
@@ -304,7 +413,7 @@ export default function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            data={images}
+            // data={images}
             // images={images.package.images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
@@ -326,7 +435,7 @@ export default function HomePage(props) {
           <ViewPhotos
             rest={rest}
             classes={classes}
-            data={images}
+            // data={images}
             activeStep={activeStep}
             steps={steps}
             // images={images.package.images}
@@ -350,7 +459,7 @@ export default function HomePage(props) {
           <EditPackage
             rest={rest}
             classes={classes}
-            data={images}
+            // data={images}
             activeStep={activeStep}
             steps={steps}
             // images={images.package.images}
@@ -374,3 +483,25 @@ export default function HomePage(props) {
     </div>
   );
 }
+
+const mapStateToProps = function (state) {
+  console.log(state);
+  return {
+    error: state.auth ? state.auth.error.response : null,
+    images: state.gallery ? state.gallery.listPhotos.data : null,
+    product: state.product.list.data ? state.product.list.data.product : null,
+    package: state.package.package ? state.package.package.data : null,
+    special_package: state.package.special_package ? state.package.special_package.data : null,
+
+
+    // loggedIn: state.auth.loggedIn
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    action: bindActionCreators({ ...authActions, ...productActions, ...packageActions }, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

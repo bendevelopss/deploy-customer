@@ -33,20 +33,14 @@ export default function SpecialPackage(props) {
         isStepOptional,
         handleSkip,
         handleReturn,
-        handleSpecialPackage
+        handleSpecialPackage,
+        specialPackage
     } = props;
 
     return (
         <div>
-            <Header
-                absolute
-                color="tr"
-                fixed
-                rightLinks={<HeaderLinks data={data}/>}
-                {...rest}
-            />
-
             <div className={classes.container}>
+
                 <GridContainer justify="center">
                     <GridItem xs={12} sm={12} md={6}>
                         <GridContainer justify="center">
@@ -60,58 +54,73 @@ export default function SpecialPackage(props) {
 
                     </GridItem>
                 </GridContainer>
-                <GridContainer justify="center">
-                    <GridItem xs={12} sm={12} md={6}>
+
+                {specialPackage ?
+                    <div>
+
+
                         <GridContainer justify="center">
-                            <div>
-                                <span className={classes.title}>Creative Session</span>
-                                <span className={classes.specialPrice}>$450</span>
-                            </div>
+                            <GridItem xs={12} sm={12} md={6}>
+                                <GridContainer justify="center">
+                                    <div>
+                                        <span className={classes.title}>{specialPackage.package_name}</span>
+                                        <span className={classes.specialPrice} style={{marginLeft: 5}}>${specialPackage.package_price}</span>
+                                    </div>
+                                </GridContainer>
+                            </GridItem>
+
                         </GridContainer>
-                    </GridItem>
 
-                </GridContainer>
+                        <GridContainer justify="center" className={classes.marginTop}>
+                            <GridItem xs={12} sm={12} md={6}>
+                                <div className={classes.dark}>
+                                    <a className={classes.bold}>{specialPackage.package_name} fee</a>  is a flat rate fee that a professional photographer
+                                     charges to create images that you could purchase after the session. I will
+                                      guide your family through the whole session and endure we get the images that
+                                       you wanted. Delivery is complimentary to Singapore. For overseas order,
+                                        clients will be charged at cost of postage to your home country.
+                                </div>
 
-                <GridContainer justify="center" className={classes.marginTop}>
-                    <GridItem xs={12} sm={12} md={6}>
-                        <div className={classes.dark}>
-                            <a className={classes.bold}>Creative Session fee</a>  is a flat rate fee that a professional photographer
-                             charges to create images that you could purchase after the session. I will
-                              guide your family through the whole session and endure we get the images that
-                               you wanted. Delivery is complimentary to Singapore. For overseas order,
-                                clients will be charged at cost of postage to your home country.
-                </div>
+                                <GridItem xs={12} sm={12} md={6} className={classes.collection} >
+                                    <div className={classes.dark}>Your Total Investment: </div>
+                                    <div className={classes.dark}> {specialPackage.package_name} </div>
+                                    {/* <div className={classes.dark}> + Collection OR Creative Session </div>
+                                    <div className={classes.dark}> + Ala-Carte Products </div> */}
+                                </GridItem>
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={6}>
+                                <span className={classes.dark}>
+                                    <h4 className={classes.bold}>Collection A</h4>
+                                    {
+                                        specialPackage.item.map(sp => (
+                                            <div><Check className={classes.iconCheck} /> {sp.quantity} x {sp.product_name} for {sp.product_type}</div>
+                                        ))
+                                    }
 
-                        <GridItem xs={12} sm={12} md={6} className={classes.collection} >
-                            <div className={classes.dark}>Your Total Investment: </div>
-                            <div className={classes.dark}> Creative Session: </div>
-                            <div className={classes.dark}> + Collection OR Creative Session </div>
-                            <div className={classes.dark}> + Ala-Carte Products </div>
-                        </GridItem>
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
-                        <span className={classes.dark}>
-                            <h4 className={classes.bold}>Collection A</h4>
-                            <div><Check className={classes.iconCheck} /> 10 Photos for 10 pages album</div>
+                                    {/* <div><Check className={classes.iconCheck} /> 10 Photos for 10 pages album</div>
                             <div><Check className={classes.iconCheck} /> 20 Photos for 4R loose print</div>
                             <div><Check className={classes.iconCheck} /> 10 Photos for 5R loose album</div>
                             <div><Check className={classes.iconCheck} /> 10 Photos for digital print</div>
-                            <div><Check className={classes.iconCheck} /> 10 Photos for 15 pages album</div>
+                            <div><Check className={classes.iconCheck} /> 10 Photos for 15 pages album</div> */}
 
-                        </span>
-                    </GridItem>
-
-                </GridContainer>
-
-                <GridContainer justify="right" >
+                                </span>
+                            </GridItem>
 
 
-                </GridContainer>
+
+                        </GridContainer>
+                    </div>
+
+                    :
+                    <GridContainer justify="center">
+                        <h2 className={classes.dark}>NO SPECIAL PACKAGE SELECTED</h2>
+                    </GridContainer>
+                }
 
             </div>
-
             <Footer
                 fixed
+                specialPackage={specialPackage}
                 activeStep={activeStep}
                 getStepContent={getStepContent}
                 steps={steps}
@@ -119,8 +128,8 @@ export default function SpecialPackage(props) {
                 handleBack={handleBack}
                 handleReset={handleReset}
                 handleNext={handleNext}
-                total={data.package.images.length}
-                liked={Object.values(data.package.images).reduce((a, { liked }) => a + liked, 0)}
+                // total={data.package.images.length}
+                // liked={Object.values(data.package.images).reduce((a, { liked }) => a + liked, 0)}
                 isStepOptional={isStepOptional}
                 handleSkip={handleSkip}
             />

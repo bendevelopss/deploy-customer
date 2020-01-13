@@ -35,15 +35,15 @@ import { Stepper, Step, StepLabel } from "@material-ui/core";
 
 import StepperComponent from "./StepperComponent"
 import NavPills from "components/NavPills/NavPills";
-
 import modalStyle from "assets/jss/material-kit-react/views/componentsSections/checkoutModalStyle.js";
 import SectionImageModal from "views/Components/Sections/SectionImageModal";
+import { constant } from "./../../config";
+
 const useStyles = makeStyles(modalStyle);
 
 export function CheckoutModal(props) {
     const { checkoutModal, handleCheckoutModal, handleNext, handleBack, handleReturn } = props
     const classes = useStyles();
-
 
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="down" ref={ref} {...props} />;
@@ -123,7 +123,7 @@ export function CheckoutModal(props) {
 }
 
 export function ImageModal(props) {
-    const { imageModal, handleImageModal, handleNext, handleBack, handleReturn, selectedImage, data } = props
+    const { imageModal, handleImageModal, handleNext, handleBack, handleReturn, selectedImage, photos, product, packages } = props
     const classes = useStyles();
 
 
@@ -169,10 +169,13 @@ export function ImageModal(props) {
             >
                 <div className={classNames(classes.main, classes.mainRaised)}>
                     <SectionImageModal
+                        packages={packages}
                         selectedImage={selectedImage}
                         handleImageModal={handleImageModal}
-                        packageType={data.packageType}
-                        total={data.package.images.filter(img => img.selected).length }
+                        // packageType={data.packageType}
+                        packages={packages}
+                        product={product}
+                        total={photos.filter(img => img.selected).length}
                     />
                 </div>
             </DialogContent>
@@ -193,11 +196,18 @@ export function ImageModal(props) {
 }
 
 function FavoritePhotos(props) {
-    const { data, classes, navImageClasses, handleDoubleClick, handleCheckoutModal, imageModal, handleSelectPhoto } = props
+    const { photos, classes, navImageClasses, handleDoubleClick, handleCheckoutModal, imageModal, handleSelectPhoto } = props
+
+    const checkPhoto = (url) => {
+        if (url != 'undefined' || url != null)
+            return true;
+        return false;
+    }
+
     return (
         <GridContainer justify="center" spacing={4} style={{ color: 'black' }}>
-            {data.package.images.filter(like => !like.favorite === data.package.images.length)}
-            {data.package.images.length > 0 ? data.package.images.filter(like => like.favorite).map(img => (
+            {photos.filter(like => !like.favorite === photos.length)}
+            {photos.length > 0 ? photos.filter(like => like.favorite).map((img, i) => (
 
                 <div style={{ width: '20%', marginRight: 8 }}>
                     <Card>
@@ -205,16 +215,17 @@ function FavoritePhotos(props) {
                             <img
                                 alt="..."
                                 style={{ "border": img.selected ? `2px solid ${pinkColor}` : 0 }}
-                                src={img.image}
+                                // src={img.image}
+                                src={checkPhoto(img.photo_thumbnail_url) ? `${constant.imgUrl}` + img.photo_thumbnail_url : null}
                                 className={navImageClasses}
-                                onClick={() => handleSelectPhoto({ name: img.name, src: img.image, selected: img.selected, index: img.index })}
+                                onClick={() => handleSelectPhoto({ name: img.photo_thumbnail_url, src: img.photo_thumbnail_url, selected: img.selected, index: i })}
                             />
                         </div>
                     </Card>
                 </div>
             )) : null
             }
-            {data.package.images.filter(img => img.favorite).length === 0 ? <h4 className={classes.title, classes.marginTop}>NO PHOTOS SELECTED</h4> : null}
+            {photos.filter(img => img.favorite).length === 0 ? <h4 className={classes.title, classes.marginTop}>NO PHOTOS SELECTED</h4> : null}
 
 
         </GridContainer>
@@ -222,19 +233,26 @@ function FavoritePhotos(props) {
 }
 
 function AllPhotos(props) {
-    const { data, classes, navImageClasses, handleSelectPhoto } = props
+    const { photos, classes, navImageClasses, handleSelectPhoto } = props
+
+    const checkPhoto = (url) => {
+        if (url != 'undefined' || url != null)
+            return true;
+        return false;
+    }
     return (
         <GridContainer justify="center" spacing={4}>
-            {data.package.images.length > 0 ? data.package.images.map(img => (
+            {photos.length > 0 ? photos.map((img, i) => (
                 <div style={{ width: '20%', marginRight: 8 }}>
                     <Card>
                         <div>
                             <img
                                 alt="..."
                                 style={{ "border": img.selected ? `2px solid ${pinkColor}` : 0 }}
-                                src={img.image}
+                                // src={img.image}
+                                src={checkPhoto(img.photo_thumbnail_url) ? `${constant.imgUrl}` + img.photo_thumbnail_url : null}
                                 className={navImageClasses}
-                                onClick={() => handleSelectPhoto({ name: img.name, src: img.image, selected: img.selected, index: img.index })}
+                                onClick={() => handleSelectPhoto({ name: img.photo_thumbnail_url, src: img.photo_thumbnail_url, selected: img.selected, index: i })}
                             />
                             {/* <div className={classes.imgText}>
                       Like Photo   <Button simple onClick={() => handleDoubleClick(img)}>
@@ -277,6 +295,9 @@ export default function SelectPhoto(props) {
         handleImageModal,
         imageModal,
         selectedImage,
+        photos,
+        product,
+        packages
     } = props;
 
     return (
@@ -290,6 +311,9 @@ export default function SelectPhoto(props) {
                 imageModal={imageModal}
                 selectedImage={selectedImage}
                 data={data}
+                photos={photos}
+                product={product}
+                packages={packages}
             />
 
             <div className={classes.container}>
@@ -333,7 +357,8 @@ export default function SelectPhoto(props) {
                                 tabIcon: Favorite,
                                 tabContent: (
                                     <FavoritePhotos
-                                        data={data}
+                                        photos={photos}
+                                        packages={packages}
                                         classes={classes}
                                         navImageClasses={navImageClasses}
                                         handleDoubleClick={handleDoubleClick}
@@ -346,7 +371,8 @@ export default function SelectPhoto(props) {
                                 tabIcon: PhotoCamera,
                                 tabContent: (
                                     <AllPhotos
-                                        data={data}
+                                        photos={photos}
+                                        packages={packages}
                                         classes={classes}
                                         navImageClasses={navImageClasses}
                                         handleSelectPhoto={handleSelectPhoto}
