@@ -133,7 +133,7 @@ const headerLinksStyle = theme => ({
       color: "inherit",
       textDecoration: "none",
       display: "block",
-      padding: "5px 5px 5px 5px"
+      padding: "3px 5px 5px 5px"
     }
   },
   itemOpacity:{

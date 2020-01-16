@@ -22,41 +22,6 @@ import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js
 
 const useStyles = makeStyles(styles);
 
-const menu = [
-  {
-    package_id: 2, packageName: 'Package A', special_package: false, products: [
-      { product_id: 1, name: '15 page album', id: [123123, 123123, 123123] },
-      { product_id: 2, name: '4R photos', id: [123123, 123123, 123123] },
-      { product_id: 3, name: 'Digital Print', id: [123123, 123123, 123123] },
-    ]
-  },
-  {
-    package_id: 2, packageName: 'Package B', special_package: false, products: [
-      { product_id: 1, name: '15 page album', id: [123123, 123123] },
-      { product_id: 3, name: 'Digital Print', id: [123123, 123123, 123123, 123123] },
-      { product_id: 2, name: '4R photos', id: [123123, 123123, 123123] }
-    ]
-  },
-];
-
-function Menu() {
-  menu.map((pk, i) => {
-    return (
-      <div>
-        <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
-          <li><h6 className={classes.dropdownLink}>{pk.package}<small style={{ float: "right" }}>Quantity</small></h6>     </li>
-          {pk.products.map(pr => {
-            return (
-              <li><p className={classes.dropdownLink}>{pr.name}<text style={{ float: "right", color: "#F74380" }}>{pr.id.length}</text></p></li>
-            )
-          })}
-
-        </ul>
-      </div>
-    )
-  })
-}
-
 function SpecialComponent(props) {
   const classes = useStyles();
   return (
@@ -89,7 +54,7 @@ function PackageComponent(props) {
   return (
     <div>
       <li>
-        <h6 className={classes.dropdownLink}>PACKAGE</h6>
+        <h6 className={classes.dropdownLink}>{props.packages.package_name}</h6>
         <h6 className={classes.dropdownLink}>
           {/* {props.packages.name} */}
           <small style={{ float: "right" }}>At Hand</small>
