@@ -239,6 +239,9 @@ function HomePage(props) {
   const getPackage = async () => {
     if (props.package) {
       const _package = await props.package
+      await _package.item.forEach((element) => {
+        element.availed = 10; //sample only
+      });
       await setPackage(_package)
     } else console.log('HINDI PUMASOK')
   }
@@ -247,6 +250,9 @@ function HomePage(props) {
     if (props.special_package) {
       const _specialPackage = await props.special_package
       _specialPackage.selected = false
+      await _specialPackage.item.forEach((element) => {
+        element.availed = 15; //sample only
+      });
       await setSpecialPackage(_specialPackage)
     } else console.log('HINDI PUMASOK')
   }

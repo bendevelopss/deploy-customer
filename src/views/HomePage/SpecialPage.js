@@ -93,7 +93,7 @@ export default function SpecialPackage(props) {
                                     <h4 className={classes.bold}>Collection A</h4>
                                     {
                                         specialPackage.item.map(sp => (
-                                            <div><Check className={classes.iconCheck} /> {sp.quantity} x {sp.product_name} for {sp.product_type}</div>
+                                            <div><Check className={classes.iconCheck} /> {sp.availed} x {sp.product_name} for {sp.product_type}</div>
                                         ))
                                     }
 

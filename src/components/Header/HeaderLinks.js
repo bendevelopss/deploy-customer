@@ -65,8 +65,8 @@ function SpecialComponent(props) {
         <h6 className={classes.dropdownLink}>SPECIAL PACKAGE</h6>
         <h6 className={classes.dropdownLink}>
           {/* {pk.name} */}
-          <small style={{ float: "right" }}>At Hand</small>
-          <small style={{ float: "right", marginRight: 10 }}>Qty</small>
+          {/* <small style={{ float: "right" }}>At Hand</small> */}
+          <small style={{ float: "right" }}>Qty</small>
         </h6>
       </li>
       {props.specialPackage.item.map(pr => {
@@ -74,8 +74,8 @@ function SpecialComponent(props) {
           <li>
             <p className={classes.dropdownLink}>
               {pr.product_name}
-              <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{pr.quantity}</text>
-              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{pr.quantity}</text>
+              {/* <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{pr.quantity}</text> */}
+              <text style={{ float: "right", color: "#F74380" }}>{pr.availed}</text>
             </p>
           </li>
         )
@@ -101,8 +101,37 @@ function PackageComponent(props) {
           <li>
             <p className={classes.dropdownLink}>
               {_pack.product_name}
-              <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{_pack.quantity}</text>
-              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.quantity}</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{_pack.quantity - _pack.availed}</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.availed}</text>
+            </p>
+          </li>
+        )
+      })
+        : null
+      }
+    </div>
+  )
+}
+
+function AlaCarteComponent(props) {
+  const classes = useStyles();
+  return (
+    <div>
+      <li>
+        <h6 className={classes.dropdownLink}>Ala Carte</h6>
+        <h6 className={classes.dropdownLink}>
+          {/* {props.packages.name} */}
+          {/* <small style={{ float: "right" }}>At Hand</small> */}
+          <small style={{ float: "right", marginRight: 10 }}>Qty</small>
+        </h6>
+      </li>
+      {props.packages && props.packages.product.length > 0 ? props.packages.product.map(_pack => {
+        return (
+          <li>
+            <p className={classes.dropdownLink}>
+              {_pack.product_name}
+              <text style={{ float: "right", color: "#F74380", }}>{_pack.quantity - _pack.availed}</text>
+              {/* <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.quantity}</text> */}
             </p>
           </li>
         )
@@ -127,26 +156,6 @@ function Dropdown(props) {
     <div>
       <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
 
-        {/* <li>
-                      <h6 className={classes.dropdownLink}>SPECIAL PACKAGE</h6>
-                      <h6 className={classes.dropdownLink}>
-                        {pk.name}
-                        <small style={{ float: "right" }}>At Hand</small>
-                        <small style={{ float: "right", marginRight: 10 }}>Qty</small>
-                      </h6>
-                    </li>
-                    {pk.item.map(pr => {
-                      return (
-                        <li>
-                          <p className={classes.dropdownLink}>
-                            {pr.product_name}
-                            <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{pr.quantity}</text>
-                            <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{pr.quantity}</text>
-                          </p>
-                        </li>
-                      )
-                    })} */}
-
         {props.specialPackage && props.specialPackage.item.length > 0 && props.specialPackage.selected ?
           <SpecialComponent {...props} />
           : null
@@ -154,6 +163,11 @@ function Dropdown(props) {
 
         {props.packages && props.packages.product.length > 0 ?
           <PackageComponent {...props} />
+          : null
+        }
+
+        {props.packages && props.packages.product.length > 0 ?
+          <AlaCarteComponent {...props} />
           : null
         }
 

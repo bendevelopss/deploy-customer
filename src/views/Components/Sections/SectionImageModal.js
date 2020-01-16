@@ -213,7 +213,7 @@ export default function SectionImageModal(props) {
                                     />
                                   }
                                   classes={{ label: classes.label, root: classes.labelRoot }}
-                                  label={type.product_name}
+                                  label={`${type.availed} x ${type.product_name}`}
                                   key={type.product_id}
                                 />
                               </div>
