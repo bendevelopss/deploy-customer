@@ -40,7 +40,7 @@ function SpecialComponent(props) {
             <p className={classes.dropdownLink}>
               {pr.product_name}
               {/* <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{pr.quantity}</text> */}
-              <text style={{ float: "right", color: "#F74380" }}>{pr.availed}</text>
+              <text style={{ float: "right", color: "#F74380" }}>{pr.quantity}</text>
             </p>
           </li>
         )
@@ -54,19 +54,19 @@ function PackageComponent(props) {
   return (
     <div>
       <li>
-        <h6 className={classes.dropdownLink}>{props.packages.package_name}</h6>
+        <h6 className={classes.dropdownLink}>{props.package.package_name}</h6>
         <h6 className={classes.dropdownLink}>
           {/* {props.packages.name} */}
-          <small style={{ float: "right" }}>At Hand</small>
+          <small style={{ float: "right" }}>Available</small>
           <small style={{ float: "right", marginRight: 10 }}>Qty</small>
         </h6>
       </li>
-      {props.packages && props.packages.product.length > 0 ? props.packages.product.map(_pack => {
+      {props.package && props.package.item.length > 0 ? props.package.item.map(_pack => {
         return (
           <li>
             <p className={classes.dropdownLink}>
               {_pack.product_name}
-              <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{_pack.quantity - _pack.availed}</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{_pack.quantity}</text>
               <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.availed}</text>
             </p>
           </li>
@@ -90,7 +90,7 @@ function AlaCarteComponent(props) {
           <small style={{ float: "right", marginRight: 10 }}>Qty</small>
         </h6>
       </li>
-      {props.packages && props.packages.product.length > 0 ? props.packages.product.map(_pack => {
+      {props.alaCarte && props.alaCarte.product.length > 0 ? props.alaCarte.product.map(_pack => {
         return (
           <li>
             <p className={classes.dropdownLink}>
@@ -111,7 +111,7 @@ function Dropdown(props) {
   const classes = useStyles();
 
   console.log('====================================');
-  console.log(props.specialPackage);
+  console.log(props);
   console.log('====================================');
   return (
     // specialPackage && specialPackage.length > 0 ? specialPackage.filter(x => x.selected).map((pk, i) => {
@@ -126,8 +126,8 @@ function Dropdown(props) {
           : null
         }
 
-        {props.packages && props.packages.product.length > 0 ?
-          <PackageComponent {...props} />
+        {props.package && props.package.item.length > 0 ?
+          <PackageComponent package={props.package} />
           : null
         }
 
@@ -135,8 +135,6 @@ function Dropdown(props) {
           <AlaCarteComponent {...props} />
           : null
         }
-
-
 
       </ul>
     </div>
@@ -154,7 +152,7 @@ export default function HeaderLinks(props) {
   // const _specialPackage = specialPackage ? [specialPackage] : []
 
   console.log('====================================');
-  console.log(props, specialPackage, packages);
+  console.log(props);
   console.log('====================================');
   const classes = useStyles();
 

@@ -97,8 +97,9 @@ function HomePage(props) {
   const [photos, setPhotos] = React.useState(null);
   const [product, setProduct] = React.useState(null);
   const [packages, setPackage] = React.useState(null);
-  const [newPackage, setNewPackage] = React.useState(null);
+  const [alaCarte, setAlaCarte] = React.useState(null);
   const [special_packages, setSpecialPackage] = React.useState(null);
+  const [productType, setProductType] = React.useState([]);
 
 
   const cookies = new Cookies();
@@ -163,9 +164,6 @@ function HomePage(props) {
   };
 
   const handleImageModal = (img, isSelected, packSelected, productType) => {
-    console.log('====================================');
-    console.log(imageModal, img, isSelected, packSelected, productType);
-    console.log('====================================');
     if (imageModal) {
       if (img && isSelected !== undefined) {
         const curImg = [...photos];
@@ -184,9 +182,13 @@ function HomePage(props) {
     } else if (!imageModal) {
       setImageModal(true);
       if (img) setSelectedImage(img)
+
+      setImageModal(img);
     }
     if (packSelected === "done") {
-      const _pack = {
+      console.log(productType, packages);
+
+      const _package = {
         package_name: packages.package_name,
         status: packages.status,
         package_id: packages.package_id,
@@ -196,22 +198,28 @@ function HomePage(props) {
         product: []
       }
 
-      _pack.product.push(...productType)
-      const _package = [];
-      const newProductType = []
+      const _alacarte = {
+        product: []
+      }
+      packages.item.map(pack => {
+        productType.filter(prod => prod.product_id === pack.product_id).map((item) => {
+          _package.product.push(item)
+        })
+      })
 
-      // console.log(_pack);
-      // newProductType.push(productType)
-      // _package.push(..._pack)
-      // _package.product = []
-      // _package.product.push(...newProductType)
-      
+      packages.item.forEach(pack => {
+        productType.filter(prod => { console.log(prod.product_id, pack.product_id)}).map((item) => {
+          _alacarte.product.push(item)
+        })
+      })
+
       console.log('====================================');
-      console.log(_pack);
+      console.log('duplicate', _package, _alacarte);
+      console.log(packages.item)
       console.log('====================================');
+      setPackage(_package)
+      setAlaCarte(_alacarte)
 
-
-       setNewPackage(_pack)
     }
   };
 
@@ -232,7 +240,23 @@ function HomePage(props) {
   const getProduct = async () => {
     if (props.product) {
       const _product = await props.product
+      const object = []
+      const seen = new Set();
+
       await setProduct(_product)
+      props.product.map(element => {
+        if (element.product_type_id) {
+          object.push({ productType: element.product_type, product_type_id: element.product_type_id })
+        }
+      })
+
+      const filteredArray = object.filter(el => {
+        const duplicate = seen.has(el.product_type_id)
+        seen.add(el.product_type_id)
+        return !duplicate;
+      })
+
+      setProductType(filteredArray)
     } else console.log('HINDI PUMASOK')
   }
 
@@ -240,7 +264,7 @@ function HomePage(props) {
     if (props.package) {
       const _package = await props.package
       await _package.item.forEach((element) => {
-        element.availed = 10; //sample only
+        element.availed = 1;
       });
       await setPackage(_package)
     } else console.log('HINDI PUMASOK')
@@ -250,9 +274,6 @@ function HomePage(props) {
     if (props.special_package) {
       const _specialPackage = await props.special_package
       _specialPackage.selected = false
-      await _specialPackage.item.forEach((element) => {
-        element.availed = 15; //sample only
-      });
       await setSpecialPackage(_specialPackage)
     } else console.log('HINDI PUMASOK')
   }
@@ -321,7 +342,7 @@ function HomePage(props) {
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
   console.log('====================================');
-  console.log(props);
+  console.log(productType);
   console.log('====================================');
 
   return (
@@ -330,7 +351,7 @@ function HomePage(props) {
         absolute
         color="tr"
         fixed
-        rightLinks={<HeaderLinks customer={_customer} specialPackage={special_packages} packages={newPackage} />}
+        rightLinks={<HeaderLinks customer={_customer} specialPackage={special_packages} package={packages} alaCarte={alaCarte} />}
         {...rest}
       />
 
@@ -390,7 +411,9 @@ function HomePage(props) {
             activeStep={activeStep}
             steps={steps}
             photos={photos}
-            // data={images}
+            selectedImage={selectedImage}
+            selectedImage={imageModal}
+            productType={productType}
             package={packages}
             product={product}
             packages={packages}
@@ -409,7 +432,7 @@ function HomePage(props) {
             handleSelectPhoto={handleSelectPhoto}
             handleImageModal={handleImageModal}
             imageModal={imageModal}
-            selectedImage={selectedImage}
+          // selectedImage={selectedImage}
           />
         ) : null}
 
@@ -498,8 +521,6 @@ const mapStateToProps = function (state) {
     product: state.product.list.data ? state.product.list.data.product : null,
     package: state.package.package ? state.package.package.data : null,
     special_package: state.package.special_package ? state.package.special_package.data : null,
-
-
     // loggedIn: state.auth.loggedIn
   }
 }

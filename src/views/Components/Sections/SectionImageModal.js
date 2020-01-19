@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // react component for creating beautiful carousel
 import Carousel from "react-slick";
 // @material-ui/core components
@@ -70,7 +70,7 @@ const useStyles2 = makeStyles(theme => ({
 
 
 export default function SectionImageModal(props) {
-  const { selectedImage, handleImageModal, packageType, total, product, packages } = props;
+  const { selectedImage, handleImageModal, packageType, total, product, packages, productType } = props;
   const sectionClass = useStyles2();
   const settings = {
     dots: false,
@@ -89,6 +89,7 @@ export default function SectionImageModal(props) {
   console.log('====================================');
   console.log(product, selectedImage, packages);
   console.log('====================================');
+
 
 
   const handleToggle = (e, data, value, index, index2) => {
@@ -115,7 +116,7 @@ export default function SectionImageModal(props) {
     }
 
     console.log(obj);
-    
+
 
     setNewProductType(obj)
 
@@ -173,10 +174,10 @@ export default function SectionImageModal(props) {
                       Choose Photo Type
                     </Typography>
 
-                    {packages && !packages.hidden && packages.item.length > 0 ? packages.item.map((type, index) => (
+                    {productType && productType.length > 0 ? productType.map((type, index) => (
                       <ExpansionPanel
-                        expanded={expanded === type.product_id}
-                        onChange={handleChange(type.product_id)}
+                        expanded={expanded === type.product_type_id}
+                        onChange={handleChange(type.product_type_id)}
                       >
                         <ExpansionPanelSummary
                           expandIcon={<ExpandMoreIcon />}
@@ -184,43 +185,48 @@ export default function SectionImageModal(props) {
                           id="panel1bh-header"
                         >
                           <Typography className={sectionClass.heading}>
-                            For {type.product_type}
+                            For {type.productType}
                           </Typography>
                         </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                          <GridItem>
 
-                            <div>
-                              <div
-                                className={
-                                  classes.checkboxAndRadio,
-                                  classes.checkboxAndRadioHorizontal
-                                }
-                              >
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      tabIndex={-1}
-                                      onChange={(e) => handleToggle(e, type, 21)}
-                                      checkedIcon={<Check className={classes.checkedIcon} />}
-                                      icon={<Check className={classes.uncheckedIcon} />}
-                                      // checked={}
-                                      classes={{
-                                        checked: classes.checked,
-                                        root: classes.checkRoot
-                                      }}
+                        {product.length > 0 ? product.filter(el => el.product_type_id === type.product_type_id).map(prod => (
+                          <ExpansionPanelDetails>
+                            <GridItem>
 
-                                    />
+                              <div>
+                                <div
+                                  className={
+                                    classes.checkboxAndRadio,
+                                    classes.checkboxAndRadioHorizontal
                                   }
-                                  classes={{ label: classes.label, root: classes.labelRoot }}
-                                  label={`${type.availed} x ${type.product_name}`}
-                                  key={type.product_id}
-                                />
+                                >
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        tabIndex={-1}
+                                        onChange={(e) => handleToggle(e, prod, 21)}
+                                        checkedIcon={<Check className={classes.checkedIcon} />}
+                                        icon={<Check className={classes.uncheckedIcon} />}
+                                        // checked={}
+                                        classes={{
+                                          checked: classes.checked,
+                                          root: classes.checkRoot
+                                        }}
+                                      />
+                                    }
+                                    classes={{ label: classes.label, root: classes.labelRoot }}
+                                    label={`1 x ${prod.product_name}`}
+                                    key={prod.product_id}
+                                  />
+                                </div>
                               </div>
-                            </div>
                             {/* )) : null} */}
-                          </GridItem>
-                        </ExpansionPanelDetails>
+                            </GridItem>
+                          </ExpansionPanelDetails>
+                        )) : null
+
+                        }
+
                       </ExpansionPanel>
                     )) : null}
 

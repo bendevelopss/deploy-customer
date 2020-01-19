@@ -123,7 +123,7 @@ export function CheckoutModal(props) {
 }
 
 export function ImageModal(props) {
-    const { imageModal, handleImageModal, handleNext, handleBack, handleReturn, selectedImage, photos, product, packages } = props
+    const { imageModal, handleImageModal, handleNext, handleBack, handleReturn, selectedImage, photos, product, packages, productType } = props
     const classes = useStyles();
 
 
@@ -173,6 +173,7 @@ export function ImageModal(props) {
                         selectedImage={selectedImage}
                         handleImageModal={handleImageModal}
                         // packageType={data.packageType}
+                        productType={productType}
                         packages={packages}
                         product={product}
                         total={photos.filter(img => img.selected).length}
@@ -297,7 +298,8 @@ export default function SelectPhoto(props) {
         selectedImage,
         photos,
         product,
-        packages
+        packages,
+        productType
     } = props;
 
     return (
@@ -314,6 +316,7 @@ export default function SelectPhoto(props) {
                 photos={photos}
                 product={product}
                 packages={packages}
+                productType={productType}
             />
 
             <div className={classes.container}>
