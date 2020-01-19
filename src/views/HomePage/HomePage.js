@@ -213,6 +213,7 @@ function HomePage(props) {
       console.log('duplicate', _package, _alacarte, oneIDs, result);
       console.log(packages.item)
       console.log('====================================');
+      
       setPackage(_package)
       setAlaCarte(_alacarte)
 

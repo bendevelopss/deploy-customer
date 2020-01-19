@@ -90,12 +90,12 @@ function AlaCarteComponent(props) {
           <small style={{ float: "right", marginRight: 10 }}>Qty</small>
         </h6>
       </li>
-      {props.alaCarte && props.alaCarte.product.length > 0 ? props.alaCarte.product.map(_pack => {
+      {props.alaCarte.product && props.alaCarte.product.length > 0 ? props.alaCarte.product.map(ala => {
         return (
           <li>
             <p className={classes.dropdownLink}>
-              {_pack.product_name}
-              <text style={{ float: "right", color: "#F74380", }}>{_pack.quantity - _pack.availed}</text>
+              {ala.product_name}
+              <text style={{ float: "right", color: "#F74380", }}>{ala.quantity}</text>
               {/* <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.quantity}</text> */}
             </p>
           </li>
@@ -131,7 +131,7 @@ function Dropdown(props) {
           : null
         }
 
-        {props.packages && props.packages.product.length > 0 ?
+        {props.alaCarte.product && props.alaCarte.product.length > 0 ?
           <AlaCarteComponent {...props} />
           : null
         }
