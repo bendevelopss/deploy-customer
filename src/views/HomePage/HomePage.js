@@ -105,10 +105,6 @@ function HomePage(props) {
   const cookies = new Cookies();
   const _customer = cookies.get('customer');
 
-  console.log('====================================');
-  console.log(_customer);
-  console.log('====================================');
-
   const steps = getSteps();
 
   const isStepOptional = step => {
@@ -186,8 +182,6 @@ function HomePage(props) {
       setImageModal(img);
     }
     if (packSelected === "done") {
-      console.log(productType, packages);
-
       const _package = {
         package_name: packages.package_name,
         status: packages.status,
@@ -195,7 +189,7 @@ function HomePage(props) {
         special_package_flag: packages.special_package_flag,
         package_price: packages.package_price,
         hidden: packages.hidden,
-        product: []
+        item: []
       }
 
       const _alacarte = {
@@ -203,18 +197,20 @@ function HomePage(props) {
       }
       packages.item.map(pack => {
         productType.filter(prod => prod.product_id === pack.product_id).map((item) => {
-          _package.product.push(item)
+          _package.item.push(item)
         })
       })
 
-      packages.item.forEach(pack => {
-        productType.filter(prod => { console.log(prod.product_id, pack.product_id)}).map((item) => {
-          _alacarte.product.push(item)
-        })
-      })
+      let oneIDs = packages.item.map(a => { return a.product_id });
+
+      let result = productType.filter(a => {
+        return oneIDs.indexOf(a.product_id) === -1;
+      });
+
+      _alacarte.product.push(...result)
 
       console.log('====================================');
-      console.log('duplicate', _package, _alacarte);
+      console.log('duplicate', _package, _alacarte, oneIDs, result);
       console.log(packages.item)
       console.log('====================================');
       setPackage(_package)
@@ -340,10 +336,6 @@ function HomePage(props) {
     classes.imgFluid
   );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
-
-  console.log('====================================');
-  console.log(productType);
-  console.log('====================================');
 
   return (
     <div>
