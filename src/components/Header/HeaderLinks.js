@@ -67,7 +67,7 @@ function PackageComponent(props) {
             <p className={classes.dropdownLink}>
               {_pack.product_name}
               <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{_pack.quantity}</text>
-              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.availed}</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>1</text>
             </p>
           </li>
         )
@@ -109,15 +109,7 @@ function AlaCarteComponent(props) {
 
 function Dropdown(props) {
   const classes = useStyles();
-
-  console.log('====================================');
-  console.log(props);
-  console.log('====================================');
   return (
-    // specialPackage && specialPackage.length > 0 ? specialPackage.filter(x => x.selected).map((pk, i) => {
-
-    // package || special_package ? {
-    // return (
     <div>
       <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
 
@@ -131,7 +123,7 @@ function Dropdown(props) {
           : null
         }
 
-        {props.alaCarte.product && props.alaCarte.product.length > 0 ?
+        {props.alaCarte && props.alaCarte.product.length > 0 ?
           <AlaCarteComponent {...props} />
           : null
         }
@@ -139,8 +131,6 @@ function Dropdown(props) {
       </ul>
     </div>
   )
-  // }) : null
-  // )
 }
 
 
