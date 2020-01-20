@@ -122,6 +122,7 @@ function SelectPhotosFooter(props) {
                       size={"lg"}
                       color="pink"
                       onClick={() => handleCheckoutModal()}
+                      disabled={true}
                     // className={classes.backButton}
                     > Proceed to Checkout  </Button>
 

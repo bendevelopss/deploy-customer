@@ -67,7 +67,7 @@ function PackageComponent(props) {
             <p className={classes.dropdownLink}>
               {_pack.product_name}
               <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{_pack.quantity}</text>
-              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>1</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.availed}</text>
             </p>
           </li>
         )

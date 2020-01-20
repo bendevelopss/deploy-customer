@@ -100,6 +100,7 @@ function HomePage(props) {
   const [alaCarte, setAlaCarte] = React.useState(null);
   const [special_packages, setSpecialPackage] = React.useState(null);
   const [productType, setProductType] = React.useState([]);
+  const [newProduct, setNewProduct] = React.useState([]);
 
 
   const cookies = new Cookies();
@@ -121,21 +122,16 @@ function HomePage(props) {
     setPhotos(curImg);
   };
 
-  // const handlePhotoSelection = (img, isSelected) => {
-  //   const curImg = { ...images };
-
-  //   curImg.package.images[img.index].selected = isSelected;
-  //   // else curImg.package.images[img.index].selected = true;
-
-  //   setImages(curImg);
-  // };
-
   const handleSelectPhoto = (img, condition, isSelected) => {
     console.log('====================================');
     console.log(img, condition, isSelected);
     console.log('====================================');
     if (img) handleImageModal(img, condition, isSelected)
-    else return
+    if (product.length > 0) {
+      const prod = product
+      prod.forEach(el => el.checked = false)
+      setProduct(prod)
+    } else return
   };
 
   const handleSelectedPage = (page = "") => {
@@ -195,9 +191,20 @@ function HomePage(props) {
       const _alacarte = {
         product: []
       }
+
+      productType.forEach(item => item.availed = 0)
+      const seen = new Set();
+
       packages.item.map(pack => {
         productType.filter(prod => prod.product_id === pack.product_id).map((item) => {
+          item.availed = item.availed + 1
           _package.item.push(item)
+
+          // const result2 = Object.values([..._alacarte.product, ...packages.item].reduce((acc, { product_name, product_id, unit_cost, product_type_id, quantity, product_type, hidden, selected, checked, availed }) => {
+          //   acc[product_id] = { product_name, product_id, unit_cost, product_type_id, quantity, product_type, hidden, selected, checked, availed: (acc[product_id] ? acc[product_id].availed : 1) + availed };
+          //   return acc;
+          // }, {}));
+
         })
       })
 
@@ -207,16 +214,36 @@ function HomePage(props) {
         return oneIDs.indexOf(a.product_id) === -1;
       });
 
+      const filteredArray = _package.item.filter(el => {
+        const duplicate = seen.has(el.product_id)
+        seen.add(el.product_id)
+        return !duplicate;
+      })
+      // _alacarte.product.map(item => item.availed += 1)
+
       _alacarte.product.push(...result)
 
+      const filteredArray2 = _alacarte.product.filter(el => {
+        const duplicate = seen.has(el.product_id)
+        seen.add(el.product_id)
+        return !duplicate;
+      })
+
+      _package.item = []
+      _package.item.push(...filteredArray)
+
+      _alacarte.product = []
+      _alacarte.product.push(...filteredArray2)
+
+      // _package = package
+
       console.log('====================================');
-      console.log('duplicate', _package, _alacarte, oneIDs, result);
-      console.log(packages.item)
+      console.log('duplicate', _package, productType);
+      console.log(_package, _alacarte)
       console.log('====================================');
-      
+
       setPackage(_package)
       setAlaCarte(_alacarte)
-
     }
   };
 
@@ -240,6 +267,9 @@ function HomePage(props) {
       const object = []
       const seen = new Set();
 
+      await _product.forEach(el => el.checked = false)
+      // setNewProduct(prod)
+
       await setProduct(_product)
       props.product.map(element => {
         if (element.product_type_id) {
@@ -261,7 +291,7 @@ function HomePage(props) {
     if (props.package) {
       const _package = await props.package
       await _package.item.forEach((element) => {
-        element.availed = 1;
+        element.availed = 0;
       });
       await setPackage(_package)
     } else console.log('HINDI PUMASOK')
@@ -287,8 +317,25 @@ function HomePage(props) {
       props.action.fetchSpecialPackage(_customer.special_package_id)
     }
 
-
   }, [])
+
+  // useEffect(() => {
+  //   if (product.length > 0) {
+  //     const prod = product
+  //     prod.forEach(el => el.checked = false)
+  //     setNewProduct(prod)
+  //   }
+  // }, [])
+
+  useEffect(() => {
+    console.log('BOOM')
+    if (product !== null) {
+      const prod = product
+      prod.forEach(el => el.checked = false)
+      setProduct(prod)
+    }
+  }, [])
+
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {

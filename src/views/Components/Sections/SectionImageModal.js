@@ -84,51 +84,46 @@ export default function SectionImageModal(props) {
   const [checked, setChecked] = React.useState([24, 22]);
   const [newPackage, setNewPackage] = React.useState(null);
   const [newProductType, setNewProductType] = React.useState([]);
+  const [newProduct, setNewProduct] = React.useState([]);
+
 
 
   console.log('====================================');
-  console.log(product, selectedImage, packages);
+  console.log(product, selectedImage, packages, total);
   console.log('====================================');
 
+  useEffect(() => {
+    if (product.length > 0) {
+      const prod = product
+      prod.forEach(el => el.checked = false)
+      setNewProduct(prod)
+    }
+  }, [])
 
-
-  const handleToggle = (e, data, value, index, index2) => {
-
-
-    // const _pack = {
-    //   types: [{ ...type }],
-    //   package: "Package X",
-    //   selected: false
-    // }
-    // const currentIndex = checked.indexOf(value);
-    // const newChecked = [...checked];
+  const handleToggle = (e, data) => {
     let obj = []
     obj.push(...newProductType)
     console.log('====================================');
-    console.log(e.target, data, index, index2, obj);
+    console.log(data, obj, newProduct);
     console.log('====================================');
     const checked = e.target.checked
+    let _prodd = newProduct
     if (checked) {
       obj.push(data)
     } else {
-      const foundIndex = obj.findIndex((el) => (el.product_type_id === data.product_type_id));
+      const foundIndex = obj.findIndex(el => (el.product_type_id === data.product_type_id));
       obj.splice(foundIndex, 1)
     }
 
-    console.log(obj);
+    _prodd.forEach((element, index) => {
+      if (element.product_id === data.product_id) {
+        _prodd[index] = data;
+      }
+    });
 
-
+    data.checked = !data.checked
+    setNewProduct(_prodd)
     setNewProductType(obj)
-
-    // handleImageModal(null, false, { index: index, index2: index2 })
-    // setNewPackage(_pack)
-
-    // if (currentIndex === -1) {
-    //   newChecked.push(value);
-    // } else {
-    //   newChecked.splice(currentIndex, 1);
-    // }
-    // setChecked(newChecked);
   };
 
   const classes = useStyles();
@@ -204,10 +199,10 @@ export default function SectionImageModal(props) {
                                     control={
                                       <Checkbox
                                         tabIndex={-1}
-                                        onChange={(e) => handleToggle(e, prod, 21)}
+                                        onChange={e => handleToggle(e, prod)}
                                         checkedIcon={<Check className={classes.checkedIcon} />}
                                         icon={<Check className={classes.uncheckedIcon} />}
-                                        // checked={}
+                                        checked={prod.checked}
                                         classes={{
                                           checked: classes.checked,
                                           root: classes.checkRoot
@@ -220,7 +215,7 @@ export default function SectionImageModal(props) {
                                   />
                                 </div>
                               </div>
-                            {/* )) : null} */}
+                              {/* )) : null} */}
                             </GridItem>
                           </ExpansionPanelDetails>
                         )) : null
@@ -234,9 +229,12 @@ export default function SectionImageModal(props) {
                       <div>
                         <Button
                           round
-                          disabled={total <= 9 ? false : true}
+                          disabled={false}
                           color="pink"
-                          onClick={() => total <= 9 ? handleImageModal(selectedImage, true, "done", newProductType) : null}
+                          onClick={() => {
+                            handleImageModal(selectedImage, true, "done", newProductType)
+                            setExpanded(false)
+                          }}
                         >
                           Done
                         </Button>
