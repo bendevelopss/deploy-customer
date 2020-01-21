@@ -178,68 +178,42 @@ function HomePage(props) {
       setImageModal(img);
     }
     if (packSelected === "done") {
-      const _package = {
-        package_name: packages.package_name,
-        status: packages.status,
-        package_id: packages.package_id,
-        special_package_flag: packages.special_package_flag,
-        package_price: packages.package_price,
-        hidden: packages.hidden,
-        item: []
-      }
+      const _package = packages
+      const _alacarte = alaCarte
 
-      const _alacarte = {
-        product: []
-      }
-
-      productType.forEach(item => item.availed = 0)
-      const seen = new Set();
-
-      packages.item.map(pack => {
+      packages.item.forEach((pack, index) => {
         productType.filter(prod => prod.product_id === pack.product_id).map((item) => {
-          item.availed = item.availed + 1
-          _package.item.push(item)
-
-          // const result2 = Object.values([..._alacarte.product, ...packages.item].reduce((acc, { product_name, product_id, unit_cost, product_type_id, quantity, product_type, hidden, selected, checked, availed }) => {
-          //   acc[product_id] = { product_name, product_id, unit_cost, product_type_id, quantity, product_type, hidden, selected, checked, availed: (acc[product_id] ? acc[product_id].availed : 1) + availed };
-          //   return acc;
-          // }, {}));
-
+          if (pack.product_id === item.product_id) {
+            if (_package.item[index].availed < _package.item[index].quantity) {
+              _package.item[index].availed = _package.item[index].availed + 1
+            } else if (_package.item[index].availed >= _package.item[index].quantity) {
+              _alacarte.forEach(a => {
+                if (a.product_id === item.product_id) {
+                  a.isAvailed = true
+                  a.availed = a.availed + 1
+                }
+              })
+            }
+          }
         })
       })
 
       let oneIDs = packages.item.map(a => { return a.product_id });
-
+      
       let result = productType.filter(a => {
         return oneIDs.indexOf(a.product_id) === -1;
       });
 
-      const filteredArray = _package.item.filter(el => {
-        const duplicate = seen.has(el.product_id)
-        seen.add(el.product_id)
-        return !duplicate;
+      _alacarte.forEach(a => {
+        result.filter(res => res.product_id === a.product_id).forEach(reso => {
+          reso.isAvailed = true
+          reso.availed = reso.availed + 1
+        })
       })
-      // _alacarte.product.map(item => item.availed += 1)
-
-      _alacarte.product.push(...result)
-
-      const filteredArray2 = _alacarte.product.filter(el => {
-        const duplicate = seen.has(el.product_id)
-        seen.add(el.product_id)
-        return !duplicate;
-      })
-
-      _package.item = []
-      _package.item.push(...filteredArray)
-
-      _alacarte.product = []
-      _alacarte.product.push(...filteredArray2)
-
-      // _package = package
 
       console.log('====================================');
       console.log('duplicate', _package, productType);
-      console.log(_package, _alacarte)
+      console.log(_package, _alacarte, alaCarte)
       console.log('====================================');
 
       setPackage(_package)
@@ -264,13 +238,17 @@ function HomePage(props) {
   const getProduct = async () => {
     if (props.product) {
       const _product = await props.product
+      const _ala = await props.product
       const object = []
       const seen = new Set();
 
-      await _product.forEach(el => el.checked = false)
+      await _product.forEach(el => { el.checked = false; el.availed = 0; })
+      await _ala.forEach(el => { el.isAvailed = false; el.availed = 0; })
       // setNewProduct(prod)
 
       await setProduct(_product)
+      await setAlaCarte(_ala)
+
       props.product.map(element => {
         if (element.product_type_id) {
           object.push({ productType: element.product_type, product_type_id: element.product_type_id })
@@ -328,7 +306,6 @@ function HomePage(props) {
   // }, [])
 
   useEffect(() => {
-    console.log('BOOM')
     if (product !== null) {
       const prod = product
       prod.forEach(el => el.checked = false)

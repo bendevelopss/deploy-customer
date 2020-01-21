@@ -81,48 +81,35 @@ export default function SectionImageModal(props) {
     autoplay: false
   };
 
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [newPackage, setNewPackage] = React.useState(null);
+  // const [checked, setChecked] = React.useState([24, 22]);
+  // const [newPackage, setNewPackage] = React.useState(null);
   const [newProductType, setNewProductType] = React.useState([]);
-  const [newProduct, setNewProduct] = React.useState([]);
-
-
-
-  console.log('====================================');
-  console.log(product, selectedImage, packages, total);
-  console.log('====================================');
-
-  useEffect(() => {
-    if (product.length > 0) {
-      const prod = product
-      prod.forEach(el => el.checked = false)
-      setNewProduct(prod)
-    }
-  }, [])
+  // const [newProduct, setNewProduct] = React.useState([]);
 
   const handleToggle = (e, data) => {
     let obj = []
     obj.push(...newProductType)
-    console.log('====================================');
-    console.log(data, obj, newProduct);
-    console.log('====================================');
     const checked = e.target.checked
-    let _prodd = newProduct
-    if (checked) {
-      obj.push(data)
-    } else {
-      const foundIndex = obj.findIndex(el => (el.product_type_id === data.product_type_id));
-      obj.splice(foundIndex, 1)
-    }
+    // const checked = data.checked
 
-    _prodd.forEach((element, index) => {
-      if (element.product_id === data.product_id) {
-        _prodd[index] = data;
-      }
-    });
+    console.log(data)
+
+    // let _prodd = newProduct
+    // if (checked) {
+      obj.push(data)
+    // } else {
+    //   const foundIndex = obj.findIndex(el => (el.product_type_id === data.product_type_id));
+    //   obj.splice(foundIndex, 1)
+    // }
+
+    // _prodd.forEach((element, index) => {
+    //   if (element.product_id === data.product_id) {
+    //     _prodd[index] = data;
+    //   }
+    // });
 
     data.checked = !data.checked
-    setNewProduct(_prodd)
+    // setNewProduct(_prodd)
     setNewProductType(obj)
   };
 
@@ -234,6 +221,7 @@ export default function SectionImageModal(props) {
                           onClick={() => {
                             handleImageModal(selectedImage, true, "done", newProductType)
                             setExpanded(false)
+                            setNewProductType([])
                           }}
                         >
                           Done

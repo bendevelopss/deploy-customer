@@ -80,6 +80,7 @@ function PackageComponent(props) {
 
 function AlaCarteComponent(props) {
   const classes = useStyles();
+  console.log(props);
   return (
     <div>
       <li>
@@ -90,12 +91,12 @@ function AlaCarteComponent(props) {
           <small style={{ float: "right", marginRight: 10 }}>Qty</small>
         </h6>
       </li>
-      {props.alaCarte.product && props.alaCarte.product.length > 0 ? props.alaCarte.product.map(ala => {
+      {props.alaCarte && props.alaCarte.length > 0 ? props.alaCarte.filter(el => el.isAvailed && el.quantity > 0).map(ala => {
         return (
           <li>
             <p className={classes.dropdownLink}>
               {ala.product_name}
-              <text style={{ float: "right", color: "#F74380", }}>{ala.quantity}</text>
+              <text style={{ float: "right", color: "#F74380", }}>{ala.availed}</text>
               {/* <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{_pack.quantity}</text> */}
             </p>
           </li>
@@ -108,7 +109,10 @@ function AlaCarteComponent(props) {
 }
 
 function Dropdown(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
+  console.log('====================================');
+  console.log(props, props.alaCarte.filter(el => el.isAvailed).length);
+  console.log('====================================');
   return (
     <div>
       <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
@@ -123,8 +127,8 @@ function Dropdown(props) {
           : null
         }
 
-        {props.alaCarte && props.alaCarte.product.length > 0 ?
-          <AlaCarteComponent {...props} />
+        {props.alaCarte && props.alaCarte.length > 0 && props.alaCarte.filter(el => el.isAvailed).length > 0 ?
+          <AlaCarteComponent alaCarte={props.alaCarte} />
           : null
         }
 
