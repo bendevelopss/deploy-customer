@@ -30,8 +30,8 @@ function SpecialComponent(props) {
         <h6 className={classes.dropdownLink}>SPECIAL PACKAGE</h6>
         <h6 className={classes.dropdownLink}>
           {/* {pk.name} */}
-          {/* <small style={{ float: "right" }}>At Hand</small> */}
-          <small style={{ float: "right" }}>Qty</small>
+          <small style={{ float: "right" }}>Available</small>
+          <small style={{ float: "right", marginRight: 10 }}>Qty</small>
         </h6>
       </li>
       {props.specialPackage.item.map(pr => {
@@ -39,8 +39,8 @@ function SpecialComponent(props) {
           <li>
             <p className={classes.dropdownLink}>
               {pr.product_name}
-              {/* <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{pr.quantity}</text> */}
-              <text style={{ float: "right", color: "#F74380" }}>{pr.quantity}</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 4 }}>{pr.quantity}</text>
+              <text style={{ float: "right", color: "#F74380", marginRight: 20 }}>{pr.availed}</text>
             </p>
           </li>
         )

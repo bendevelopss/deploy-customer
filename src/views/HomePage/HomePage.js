@@ -98,7 +98,7 @@ function HomePage(props) {
   const [product, setProduct] = React.useState(null);
   const [packages, setPackage] = React.useState(null);
   const [alaCarte, setAlaCarte] = React.useState(null);
-  const [special_packages, setSpecialPackage] = React.useState(null);
+  const [specialPackage, setSpecialPackage] = React.useState(null);
   const [productType, setProductType] = React.useState([]);
   const [newProduct, setNewProduct] = React.useState([]);
 
@@ -180,6 +180,7 @@ function HomePage(props) {
     if (packSelected === "done") {
       const _package = packages
       const _alacarte = alaCarte
+      const _special = specialPackage
 
       packages.item.forEach((pack, index) => {
         productType.filter(prod => prod.product_id === pack.product_id).map((item) => {
@@ -187,10 +188,17 @@ function HomePage(props) {
             if (_package.item[index].availed < _package.item[index].quantity) {
               _package.item[index].availed = _package.item[index].availed + 1
             } else if (_package.item[index].availed >= _package.item[index].quantity) {
-              _alacarte.forEach(a => {
-                if (a.product_id === item.product_id) {
-                  a.isAvailed = true
-                  a.availed = a.availed + 1
+              _special.item.forEach(b => {
+                if (b.product_id === item.product_id && b.availed < b.quantity && _package.item[index].availed === _package.item[index].quantity) {
+                  // b.isAvailed = true
+                  b.availed = b.availed + 1
+                } else {
+                  _alacarte.forEach((a, s_index) => {
+                    if (a.product_id === item.product_id && b.availed === b.quantity) {
+                      a.isAvailed = true
+                      a.availed = a.availed + 1
+                    }
+                  })
                 }
               })
             }
@@ -199,7 +207,7 @@ function HomePage(props) {
       })
 
       let oneIDs = packages.item.map(a => { return a.product_id });
-      
+
       let result = productType.filter(a => {
         return oneIDs.indexOf(a.product_id) === -1;
       });
@@ -213,9 +221,10 @@ function HomePage(props) {
 
       console.log('====================================');
       console.log('duplicate', _package, productType);
-      console.log(_package, _alacarte, alaCarte)
+      console.log(_package, _alacarte, _special)
       console.log('====================================');
 
+      setSpecialPackage(_special)
       setPackage(_package)
       setAlaCarte(_alacarte)
     }
@@ -279,6 +288,9 @@ function HomePage(props) {
     if (props.special_package) {
       const _specialPackage = await props.special_package
       _specialPackage.selected = false
+      await _specialPackage.item.forEach((element) => {
+        element.availed = 0;
+      });
       await setSpecialPackage(_specialPackage)
     } else console.log('HINDI PUMASOK')
   }
@@ -340,7 +352,7 @@ function HomePage(props) {
   };
 
   const handleSpecialPackage = (bool) => {
-    const curImg = special_packages;
+    const curImg = specialPackage;
     curImg.selected = bool;
     setSpecialPackage(curImg);
     handleNext()
@@ -351,7 +363,7 @@ function HomePage(props) {
     if (!photos) getPhotos();
     if (!product) getProduct();
     if (!packages) getPackage();
-    if (!special_packages) getSpecialPackage();
+    if (!specialPackage) getSpecialPackage();
   }, 700);
   const classes = useStyles();
   const { ...rest } = props;
@@ -368,7 +380,7 @@ function HomePage(props) {
         absolute
         color="tr"
         fixed
-        rightLinks={<HeaderLinks customer={_customer} specialPackage={special_packages} package={packages} alaCarte={alaCarte} />}
+        rightLinks={<HeaderLinks customer={_customer} specialPackage={specialPackage} package={packages} alaCarte={alaCarte} />}
         {...rest}
       />
 
@@ -406,7 +418,7 @@ function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            specialPackage={special_packages ? special_packages : null}
+            specialPackage={specialPackage ? specialPackage : null}
             // images={images.package.images}
             // data={images}
             navImageClasses={navImageClasses}
