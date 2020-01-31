@@ -82,7 +82,7 @@ function LoginPage(props) {
           <GridContainer justify="center">
             <GridItem xs={10} sm={8} md={4} lg={4}>
               <Card className={classes[cardAnimaton]}>
-                <form className={classes.form}>
+                {/* <form className={classes.form} onSubmit={() => handleLogin}> */}
                   <CardHeader color="pink" className={classes.cardHeader}>
                     <h4>Bambini Customer</h4>
                     <div className={classes.socialLine}>
@@ -141,11 +141,11 @@ function LoginPage(props) {
                     <h4 style={{ color: 'red', textAlign: 'center'}}>{props.error ? props.error.data.message : ""}</h4>
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button simple color="pink" size="lg" onClick={e => handleLogin(e)} disabled={!password ? true : false}>
+                    <Button simple color="pink" size="lg" onClick={() => handleLogin()} disabled={!password ? true : false}>
                       Login
                     </Button>
                   </CardFooter>
-                </form>
+                {/* </form> */}
               </Card>
             </GridItem>
           </GridContainer>

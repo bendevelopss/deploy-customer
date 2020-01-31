@@ -100,7 +100,7 @@ function HomePage(props) {
   const [alaCarte, setAlaCarte] = React.useState(null);
   const [specialPackage, setSpecialPackage] = React.useState(null);
   const [productType, setProductType] = React.useState([]);
-  const [newProduct, setNewProduct] = React.useState([]);
+  
 
 
   const cookies = new Cookies();
@@ -186,15 +186,22 @@ function HomePage(props) {
         productType.filter(prod => prod.product_id === pack.product_id).map((item) => {
           if (pack.product_id === item.product_id) {
             if (_package.item[index].availed < _package.item[index].quantity) {
-              _package.item[index].availed = _package.item[index].availed + 1
+              _package.item[index].availed = _package.item[index].availed + 1;
+              _package.item[index].isAvailed = true
             } else if (_package.item[index].availed >= _package.item[index].quantity) {
               _special.item.forEach(b => {
                 if (b.product_id === item.product_id && b.availed < b.quantity && _package.item[index].availed === _package.item[index].quantity) {
-                  // b.isAvailed = true
+                  console.log('====================================');
+                  console.log('pasok sa special package', b);
+                  console.log('====================================');
+                  b.isAvailed = true
                   b.availed = b.availed + 1
                 } else {
                   _alacarte.forEach((a, s_index) => {
-                    if (a.product_id === item.product_id && b.availed === b.quantity) {
+                    if (a.product_id === item.product_id && b.availed === b.quantity && _alacarte.filter(_al => _al.availed === 0 && _al.isAvailed == true).length <= 0) {
+                      console.log('====================================');
+                      console.log('pasok sa ala carte', a, b);
+                      console.log('====================================');
                       a.isAvailed = true
                       a.availed = a.availed + 1
                     }
@@ -222,6 +229,7 @@ function HomePage(props) {
       console.log('====================================');
       console.log('duplicate', _package, productType);
       console.log(_package, _alacarte, _special)
+      console.log(_alacarte.filter(_al => _al.availed === 0 && _al.isAvailed == false).length)
       console.log('====================================');
 
       setSpecialPackage(_special)
@@ -279,6 +287,7 @@ function HomePage(props) {
       const _package = await props.package
       await _package.item.forEach((element) => {
         element.availed = 0;
+        element.isAvailed = false;
       });
       await setPackage(_package)
     } else console.log('HINDI PUMASOK')
@@ -290,6 +299,7 @@ function HomePage(props) {
       _specialPackage.selected = false
       await _specialPackage.item.forEach((element) => {
         element.availed = 0;
+        element.isAvailed = false;
       });
       await setSpecialPackage(_specialPackage)
     } else console.log('HINDI PUMASOK')
@@ -440,12 +450,15 @@ function HomePage(props) {
             activeStep={activeStep}
             steps={steps}
             photos={photos}
+            specialPackage={specialPackage} 
+            packages={packages} 
+            alaCarte={alaCarte}
             selectedImage={selectedImage}
             selectedImage={imageModal}
             productType={productType}
-            package={packages}
+            // package={packages}
             product={product}
-            packages={packages}
+            // packages={packages}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}
@@ -471,8 +484,11 @@ function HomePage(props) {
             classes={classes}
             activeStep={activeStep}
             steps={steps}
-            // data={images}
-            // images={images.package.images}
+            photos={photos}
+            customer={_customer}
+            specialPackage={specialPackage} 
+            packages={packages} 
+            alaCarte={alaCarte}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}

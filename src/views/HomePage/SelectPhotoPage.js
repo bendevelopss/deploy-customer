@@ -38,16 +38,19 @@ import NavPills from "components/NavPills/NavPills";
 import modalStyle from "assets/jss/material-kit-react/views/componentsSections/checkoutModalStyle.js";
 import SectionImageModal from "views/Components/Sections/SectionImageModal";
 import { constant } from "./../../config";
+import SpecialPackage from "./SpecialPage";
 
 const useStyles = makeStyles(modalStyle);
 
 export function CheckoutModal(props) {
-    const { checkoutModal, handleCheckoutModal, handleNext, handleBack, handleReturn } = props
+    const { checkoutModal, handleCheckoutModal, handleNext, handleBack, handleReturn, packages, specialPackage, alaCarte } = props
     const classes = useStyles();
 
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="down" ref={ref} {...props} />;
     });
+
+    console.log(alaCarte.filter(el => el.isAvailed && el.availed > 0).length, specialPackage.item.filter(el => el.isAvailed && el.availed > 0).length, packages.item.filter(el => el.isAvailed && el.availed > 0).length, packages)
 
     Transition.displayName = "Transition";
 
@@ -86,14 +89,44 @@ export function CheckoutModal(props) {
             >
                 <GridContainer justify="center">
                     <div>
-                        <h4 className={classes.bold}>PACKAGES</h4>
-                        <p>1 x 15 pages album</p>
-                        <p>10 x 4R photos</p>
-                        <p>10 x digital print</p>
 
-                        <h4 className={classes.bold} >SPECIAL PACKAGES</h4>
-                        <p>10 x 5R photos</p>
-                        <p>20 x digital print</p>
+                        <div style={{ display: packages && packages.item.length > 0 && packages.item.filter(el => el.isAvailed && el.availed > 0).length > 0 ? 'block' : 'none' }}>
+                            <h4 className={classes.bold}>{packages ? packages.package_name.toUpperCase() : null}</h4>
+                            {packages && packages.item.length > 0 ? packages.item.filter(el => el.isAvailed).map(_package => (
+                                <div>
+                                    <p> {`${_package.availed} x ${_package.product_name}`}</p>
+                                </div>
+                            ))
+                                : null
+                            }
+                        </div>
+
+                        <div style={{ display: specialPackage && specialPackage.item.length > 0 && specialPackage.item.filter(el => el.isAvailed && el.availed > 0).length > 0 ? 'block' : 'none' }}>
+                            <h4 className={classes.bold}>{specialPackage ? specialPackage.package_name.toUpperCase() : null}</h4>
+                            {specialPackage && specialPackage.item.length > 0 ? specialPackage.item.filter(el => el.isAvailed).map(_specialPackage => (
+                                <div>
+                                    <p> {`${_specialPackage.availed} x ${_specialPackage.product_name}`}</p>
+                                </div>
+                            ))
+                                : null
+                            }
+                        </div>
+
+                        <div style={{ display: alaCarte && alaCarte.length > 0 && alaCarte.filter(el => el.isAvailed && el.availed > 0).length > 0 ? 'block' : 'none' }}>
+                            <h4 className={classes.bold}>Ala Carte</h4>
+                            {alaCarte && alaCarte.length > 0 ? alaCarte.filter(el => el.isAvailed).map(_ala => (
+                                <div>
+                                    <p> {`${_ala.availed} x ${_ala.product_name}`}</p>
+                                </div>
+                            ))
+                                : null
+                            }
+                        </div>
+
+                        <h4 style={{ display: alaCarte.filter(el => el.isAvailed && el.availed > 0).length === 0 && specialPackage.item.filter(el => el.isAvailed && el.availed > 0).length === 0 && packages.item.filter(el => el.isAvailed && el.availed > 0).length === 0 ? 'block' : 'none' }}>
+                            NO PHOTOS SELECTED
+                          </h4>
+
                     </div>
                 </GridContainer>
             </DialogContent>
@@ -104,6 +137,7 @@ export function CheckoutModal(props) {
                             <Button
                                 color="pink"
                                 round size={"lg"}
+                                disabled={alaCarte.filter(el => el.isAvailed && el.availed > 0).length === 0 && specialPackage.item.filter(el => el.isAvailed && el.availed > 0).length === 0 && packages.item.filter(el => el.isAvailed && el.availed > 0).length === 0 ? true : false}
                                 onClick={() => handleNext(false)}
                             >  Proceed to Confirmation </Button>
                         </div>
@@ -176,7 +210,7 @@ export function ImageModal(props) {
                         productType={productType}
                         packages={packages}
                         product={product}
-                        total={photos.filter(img => img.selected).length}
+                    // total={photos.filter(img => img.selected).length}
                     />
                 </div>
             </DialogContent>
@@ -299,6 +333,8 @@ export default function SelectPhoto(props) {
         photos,
         product,
         packages,
+        alaCarte,
+        specialPackage,
         productType
     } = props;
 
@@ -328,6 +364,9 @@ export default function SelectPhoto(props) {
                         handleReturn={handleReturn}
                         handleNext={handleNext}
                         handleBack={handleBack}
+                        specialPackage={specialPackage}
+                        packages={packages}
+                        alaCarte={alaCarte}
                     />
                 </GridItem>
 

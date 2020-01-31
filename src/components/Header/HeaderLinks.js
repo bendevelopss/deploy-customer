@@ -27,7 +27,7 @@ function SpecialComponent(props) {
   return (
     <div>
       <li>
-        <h6 className={classes.dropdownLink}>SPECIAL PACKAGE</h6>
+        <h6 className={classes.dropdownLink}>{props.specialPackage ? props.specialPackage.package_name : null}</h6>
         <h6 className={classes.dropdownLink}>
           {/* {pk.name} */}
           <small style={{ float: "right" }}>Available</small>

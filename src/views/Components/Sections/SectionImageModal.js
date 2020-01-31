@@ -33,7 +33,7 @@ const useStyles = makeStyles(styles);
 
 const useStyles2 = makeStyles(theme => ({
   root: {
-    width: "50%"
+    width: "75%"
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -59,6 +59,9 @@ const useStyles2 = makeStyles(theme => ({
   header: {
     marginLeft: 15
   },
+  expansionDetails: {
+    padding: "2px 2px 2px 2px"
+  },
   photoType: {
     fontSize: theme.typography.pxToRem(15),
     flexBasis: "33.33%",
@@ -70,7 +73,7 @@ const useStyles2 = makeStyles(theme => ({
 
 
 export default function SectionImageModal(props) {
-  const { selectedImage, handleImageModal, packageType, total, product, packages, productType } = props;
+  const { selectedImage, handleImageModal, packageType, product, packages, productType } = props;
   const sectionClass = useStyles2();
   const settings = {
     dots: false,
@@ -148,13 +151,13 @@ export default function SectionImageModal(props) {
                     src={selectedImage ? `${constant.imgUrl}` + selectedImage.name : null}
                     // src={checkPhoto(selectedImage.src) ? `${constant.imgUrl}` + selectedImage.src : null}
                     alt={selectedImage ? selectedImage.src : "Your Image"}
-                    style={{ width: "15vw" }}
+                    style={{ width: "100%" }}
                   />
                   <div className={sectionClass.root}>
                     <h4 className={sectionClass.header}>{selectedImage ? selectedImage.name : null}</h4>
                     <Typography className={sectionClass.photoType}>
                       Choose Photo Type
-                    </Typography>
+                    </Typography> 
 
                     {productType && productType.length > 0 ? productType.map((type, index) => (
                       <ExpansionPanel
@@ -172,7 +175,7 @@ export default function SectionImageModal(props) {
                         </ExpansionPanelSummary>
 
                         {product.length > 0 ? product.filter(el => el.product_type_id === type.product_type_id).map(prod => (
-                          <ExpansionPanelDetails>
+                          <ExpansionPanelDetails className={sectionClass.expansionDetails}>
                             <GridItem>
 
                               <div>

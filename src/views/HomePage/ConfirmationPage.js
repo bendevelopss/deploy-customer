@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -26,19 +26,44 @@ export default function Confirmation(props) {
     getStepContent,
     activeStep,
     steps,
-    data,
-    // images,
+    packages,
+    alaCarte,
+    specialPackage,
     handleBack,
     handleReset,
     handleNext,
     isStepOptional,
     handleSkip,
     handleReturn,
-    handleSelectedPage
+    handleSelectedPage,
+    customer
   } = props;
 
-  console.log(data);
+  const [allPackages, setAllPackages] = React.useState([]);
 
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  const combinePackages = () => {
+    let _allPackage = [];
+
+    if (allPackages.length > 0) _allPackage.push(allPackages)
+    if (packages.item.filter(el => el.isAvailed).length > 0) _allPackage.push(...packages.item)
+    if (alaCarte.filter(el => el.isAvailed).length > 0) _allPackage.push(...alaCarte)
+    if (specialPackage.item.filter(el => el.isAvailed).length > 0) _allPackage.push(...specialPackage.item)
+
+    _allPackage.forEach(el => el.unit_cost = Number(el.unit_cost))
+    console.log('====================================');
+    console.log(_allPackage);
+    console.log('====================================');
+
+    setAllPackages(_allPackage)
+  }
+
+  useEffect(() => {
+    if (packages.item.filter(el => el.isAvailed).length > 0 || alaCarte.filter(el => el.isAvailed).length > 0 || specialPackage.item.filter(el => el.isAvailed).length > 0) combinePackages();
+  }, [])
 
   return (
     <div>
@@ -75,7 +100,7 @@ export default function Confirmation(props) {
 
           <GridItem xs={12} sm={12} md={6}>
             {
-              data.package.package.map(pack => (
+              packages && packages.item.filter(el => el.isAvailed).length > 0 ?
                 <div>
                   <GridContainer className={classes.headerLine}>
 
@@ -83,11 +108,11 @@ export default function Confirmation(props) {
                       <span className={classes.icons}>
                         <i className="fa fa-images" />
                       </span>
-                      <span className={classes.title}>{pack.name}</span>
+                      <span className={classes.title}>{packages.package_name.toUpperCase()}</span>
                       <span>
-                        <Button simple color="pink" onClick={() => handleSelectedPage("viewPackage")}>
+                        <Button simple disabled color="pink" onClick={() => handleSelectedPage("viewPackage")}>
                           View photos
-                    </Button>
+                        </Button>
                       </span>
                     </div>
 
@@ -96,12 +121,12 @@ export default function Confirmation(props) {
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       {
-                        pack.types.map(type => (
+                        packages.item.filter(el => el.isAvailed).map(type => (
                           <div>
                             <span className={classes.faCheck}>
                               <i class="fas fa-check"></i>
                             </span>
-                            <span className={classes.title}>{type.quantity} x {type.name}</span>
+                            <span className={classes.title}>{type.availed} x {type.product_name}</span>
                           </div>
                         ))
                       }
@@ -109,29 +134,32 @@ export default function Confirmation(props) {
                   </GridContainer>
 
                 </div>
-              ))
+                : null
             }
             {
-              data.specialPackage.selected ? 
+              specialPackage.item.filter(el => el.isAvailed).length > 0 ?
                 <div>
                   <GridContainer className={classes.headerLine}>
                     <div>
                       <span className={classes.icons}>
                         <i className="fa fa-images" />
                       </span>
-                      <span className={classes.title}>{data.specialPackage.name}</span>
+                      <span className={classes.title}>{specialPackage.package_name.toUpperCase()}</span>
+                      <Button simple disabled color="pink" onClick={() => handleSelectedPage("viewPackage")}>
+                        View photos
+                        </Button>
                     </div>
                   </GridContainer>
 
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       {
-                        data.specialPackage.package.map(type => (
+                        specialPackage.item.filter(el => el.isAvailed).map(type => (
                           <div>
                             <span className={classes.faCheck}>
                               <i class="fas fa-check"></i>
                             </span>
-                            <span className={classes.title}>{type.quantity} x {type.name}</span>
+                            <span className={classes.title}>{type.availed} x {type.product_name}</span>
                           </div>
                         ))
                       }
@@ -139,101 +167,42 @@ export default function Confirmation(props) {
                   </GridContainer>
 
                 </div>
-              : null
+                : null
             }
 
-
-
-
-
-            {/* <GridContainer className={classes.headerLine}>
-              <div>
-                <span className={classes.icons}>
-                  <i className="fa fa-images" />
-                </span>
-                <span className={classes.title}>PACKAGE A</span>
-                <span>
-                    <Button simple color="pink" onClick={() => handleSelectedPage("viewPackage")}>
-                      View photos
-                    </Button>
-                </span>
-              </div>
-            </GridContainer>
-
-            <GridContainer>
-              <GridItem xs={12} sm={12} md={6}>
+            {
+              alaCarte && alaCarte.length > 0 && alaCarte.filter(el => el.isAvailed).length > 0 ?
                 <div>
-                  <span className={classes.faCheck}>
-                    <i class="fas fa-check"></i>
-                  </span>
-                  <span className={classes.title}>1 x 15 pages album</span>
-                </div>
-                <div>
-                  <span className={classes.faCheck}>
-                    <i class="fas fa-check"></i>
-                  </span>
-                  <span className={classes.title}>10 x 4R photos</span>
-                </div>
-                <div>
-                  <span className={classes.faCheck}>
-                    <i class="fas fa-check"></i>
-                  </span>
-                  <span className={classes.title}>1 x digital print</span>
-                </div>
-              </GridItem>
-            </GridContainer>
+                  <GridContainer className={classes.headerLine}>
+                    <div>
+                      <span className={classes.icons}>
+                        <i className="fa fa-images" />
+                      </span>
+                      <span className={classes.title}>Ala Carte</span>
+                      <Button simple disabled color="pink" onClick={() => handleSelectedPage("viewPackage")}>
+                        View photos
+                        </Button>
+                    </div>
+                  </GridContainer>
 
-            <GridContainer className={classes.headerLine}>
-              <div>
-                <span className={classes.icons}>
-                  <i className="fa fa-images" />
-                </span>
-                <span className={classes.title}>SPECIAL PACKAGE A</span>
-              </div>
-            </GridContainer>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      {
+                        alaCarte.filter(el => el.isAvailed).map(ala => (
+                          <div>
+                            <span className={classes.faCheck}>
+                              <i class="fas fa-check"></i>
+                            </span>
+                            <span className={classes.title}>{ala.availed} x {ala.product_name}</span>
+                          </div>
+                        ))
+                      }
+                    </GridItem>
+                  </GridContainer>
 
-            <GridContainer>
-              <GridItem xs={12} sm={12} md={6}>
-                <div>
-                  <span className={classes.faCheck}>
-                    <i class="fas fa-check"></i>
-                  </span>
-                  <span className={classes.title}>10 x 5R photos</span>
                 </div>
-                <div>
-                  <span className={classes.faCheck}>
-                    <i class="fas fa-check"></i>
-                  </span>
-                  <span className={classes.title}>5 x Digital Print</span>
-                </div>
-              </GridItem>
-            </GridContainer>
-
-            <GridContainer className={classes.additional}>
-              <div>
-                <span className={classes.icons}>
-                  <i class="fas fa-plus"></i>
-                </span>
-                <span className={classes.title}>Additional Options</span>
-              </div>
-            </GridContainer>
-
-            <GridContainer>
-              <GridItem xs={12} sm={12} md={6}>
-                <div>
-                  <span className={classes.faCheck}>
-                    <i class="fas fa-check"></i>
-                  </span>
-                  <span className={classes.title}>2 x canvas</span>
-                </div>
-                <div>
-                  <span className={classes.faCheck}>
-                    <i class="fas fa-check"></i>
-                  </span>
-                  <span className={classes.title}>5 x Digital Print</span>
-                </div>
-              </GridItem>
-            </GridContainer>*/}
+                : null
+            }
           </GridItem>
 
           <GridItem
@@ -245,22 +214,25 @@ export default function Confirmation(props) {
             <GridContainer justify="center" className={classes.left}>
               <div>
                 <div>
-                  <h5 className={classes.title}>Customer Name</h5>
-                  <h5 className={classes.title}>your@email.com</h5>
-                  <h5 className={classes.title}>02-PHONE-NUMBER</h5>
+                  <h4 className={(classes.title, classes.bold)}>
+                    CUSTOMER DETAILS
+                  </h4>
+                  <h5 className={classes.title}>Customer Name: {customer.first_name} {customer.last_name}</h5>
+                  <h5 className={classes.title}>E-mail: {customer.email}</h5>
+                  <h5 className={classes.title}>Phone Number: +{customer.phone_number}</h5>
                 </div>
                 <div>
                   <h4 className={(classes.title, classes.bold)}>
                     ORDER SUMMARY
                   </h4>
                   <h5 className={classes.title}>
-                    Subtotal (6 items) <span>$600.00</span>
+                    Subtotal ({allPackages.filter(el => el.isAvailed).length} items) <span>${numberWithCommas(Object.values(allPackages.filter(el => el.isAvailed)).reduce((a, { unit_cost }) => a + unit_cost, 0).toFixed(2))}</span>
                   </h5>
                   <h5 className={classes.title}>
-                    Shipping Fee <span>$30.00</span>
+                    Shipping Fee <span>$0.00</span>
                   </h5>
                   <h4 className={(classes.title, classes.bold)}>
-                    Total <span style={{ color: pinkColor }}>$630.00</span>
+                    Total <span style={{ color: pinkColor }}>${numberWithCommas(Object.values(allPackages).reduce((a, { unit_cost }) => a + unit_cost, 0).toFixed(2))}</span>
                   </h4>
 
                   <span>
@@ -290,8 +262,6 @@ export default function Confirmation(props) {
         handleBack={handleBack}
         handleReset={handleReset}
         handleNext={handleNext}
-        // total={images.length}
-        // liked={Object.values(images).reduce((a, { liked }) => a + liked, 0)}
         isStepOptional={isStepOptional}
         handleSkip={handleSkip}
         handleReturn={handleReturn}
