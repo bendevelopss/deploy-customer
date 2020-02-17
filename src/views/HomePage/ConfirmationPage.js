@@ -49,15 +49,11 @@ export default function Confirmation(props) {
     let _allPackage = [];
 
     if (allPackages.length > 0) _allPackage.push(allPackages)
-    if (packages.item.filter(el => el.isAvailed).length > 0) _allPackage.push(...packages.item)
-    if (alaCarte.filter(el => el.isAvailed).length > 0) _allPackage.push(...alaCarte)
-    if (specialPackage.item.filter(el => el.isAvailed).length > 0) _allPackage.push(...specialPackage.item)
+    if (packages.item.filter(el => el.isAvailed).length > 0) _allPackage.push(...packages.item.filter(el => el.isAvailed))
+    if (alaCarte.filter(el => el.isAvailed).length > 0) _allPackage.push(...alaCarte.filter(el => el.isAvailed))
+    if (specialPackage.item.filter(el => el.isAvailed).length > 0) _allPackage.push(...specialPackage.item.filter(el => el.isAvailed))
 
     _allPackage.forEach(el => el.unit_cost = Number(el.unit_cost))
-    console.log('====================================');
-    console.log(_allPackage);
-    console.log('====================================');
-
     setAllPackages(_allPackage)
   }
 
@@ -110,7 +106,7 @@ export default function Confirmation(props) {
                       </span>
                       <span className={classes.title}>{packages.package_name.toUpperCase()}</span>
                       <span>
-                        <Button simple disabled color="pink" onClick={() => handleSelectedPage("viewPackage")}>
+                        <Button simple color="pink" onClick={() => handleSelectedPage("viewPackage")}>
                           View photos
                         </Button>
                       </span>
@@ -145,9 +141,9 @@ export default function Confirmation(props) {
                         <i className="fa fa-images" />
                       </span>
                       <span className={classes.title}>{specialPackage.package_name.toUpperCase()}</span>
-                      <Button simple disabled color="pink" onClick={() => handleSelectedPage("viewPackage")}>
+                      {/* <Button simple disabled color="pink" onClick={() => handleSelectedPage("viewPackage")}>
                         View photos
-                        </Button>
+                        </Button> */}
                     </div>
                   </GridContainer>
 
@@ -176,16 +172,30 @@ export default function Confirmation(props) {
                   <GridContainer className={classes.headerLine}>
                     <div>
                       <span className={classes.icons}>
-                        <i className="fa fa-images" />
+                        <i className="fa fa-plus" />
                       </span>
-                      <span className={classes.title}>Ala Carte</span>
-                      <Button simple disabled color="pink" onClick={() => handleSelectedPage("viewPackage")}>
+                      <span className={classes.title}>Additional Options</span>
+                      <span className={classes.title}>Price</span>
+                      {/* <Button simple disabled color="pink" onClick={() => handleSelectedPage("viewPackage")}>
                         View photos
-                        </Button>
+                        </Button> */}
                     </div>
                   </GridContainer>
 
                   <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      {
+                        alaCarte.filter(el => el.isAvailed).map(ala => (
+                          <div>
+                            <span className={classes.faCheck}>
+                              <i class="fas fa-check"></i>
+                            </span>
+                            <span className={classes.title}>{ala.availed} x {ala.product_name}</span>
+                          </div>
+                        ))
+                      }
+                    </GridItem>
+
                     <GridItem xs={12} sm={12} md={6}>
                       {
                         alaCarte.filter(el => el.isAvailed).map(ala => (

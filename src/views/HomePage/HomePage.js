@@ -100,8 +100,7 @@ function HomePage(props) {
   const [alaCarte, setAlaCarte] = React.useState(null);
   const [specialPackage, setSpecialPackage] = React.useState(null);
   const [productType, setProductType] = React.useState([]);
-  
-
+  const [productSelected, setProductSelected] = React.useState([]);
 
   const cookies = new Cookies();
   const _customer = cookies.get('customer');
@@ -134,8 +133,9 @@ function HomePage(props) {
     } else return
   };
 
-  const handleSelectedPage = (page = "") => {
+  const handleSelectedPage = (page = "", pack) => {
     setSelectedPage(page)
+    setProductSelected(pack)
   };
 
   const handleNext = (modal = true) => {
@@ -158,7 +158,12 @@ function HomePage(props) {
   const handleImageModal = (img, isSelected, packSelected, productType) => {
     if (imageModal) {
       if (img && isSelected !== undefined) {
+
         const curImg = [...photos];
+
+        console.log('====================================');
+        console.log(img, curImg, isSelected);
+        console.log('====================================');
         curImg[img.index].selected = isSelected;
         setImages(curImg);
         setSelectedImage(img)
@@ -188,6 +193,8 @@ function HomePage(props) {
             if (_package.item[index].availed < _package.item[index].quantity) {
               _package.item[index].availed = _package.item[index].availed + 1;
               _package.item[index].isAvailed = true
+              _package.item[index].photos = []
+              _package.item[index].photos.push(img)
             } else if (_package.item[index].availed >= _package.item[index].quantity) {
               _special.item.forEach(b => {
                 if (b.product_id === item.product_id && b.availed < b.quantity && _package.item[index].availed === _package.item[index].quantity) {
@@ -226,6 +233,8 @@ function HomePage(props) {
         })
       })
 
+
+
       console.log('====================================');
       console.log('duplicate', _package, productType);
       console.log(_package, _alacarte, _special)
@@ -236,6 +245,46 @@ function HomePage(props) {
       setPackage(_package)
       setAlaCarte(_alacarte)
     }
+
+    if (packSelected === "editPhoto") {
+
+      const curImg = [...photos];
+      const selectedImgs = []
+      console.log(curImg);
+
+      if (img.img.photo_id) {
+        curImg[img.index].selected = !curImg[img.index].selected
+        // if (curImg[img.index].selected) selectedImgs.push(...curImg)
+        setImages(curImg);
+
+        curImg.map(img => {
+          if (img.selected) selectedImgs.push({name: img.photo_thumbnail_url, src: img.photo_thumbnail_url, selected: img.selected})
+        })
+
+        console.log('SS', selectedImgs);
+
+        packages.item.forEach(item => {
+          if (item.product_id === productSelected.product_id) {
+            item.photos = []
+            item.photos.push(...selectedImgs)
+          }
+        })
+      }
+      // else curImg.packageType[packSelected.index].type[packSelected.index2].selected = true;
+
+      // setImages(curImg);
+
+      console.log('====================================');
+      console.log(img, productSelected, packages);
+      console.log('====================================');
+
+
+      console.log('wewe', packages);
+
+      console.log('EDIT PHOTO')
+    }
+
+
   };
 
   const handleBack = () => {
@@ -450,8 +499,8 @@ function HomePage(props) {
             activeStep={activeStep}
             steps={steps}
             photos={photos}
-            specialPackage={specialPackage} 
-            packages={packages} 
+            specialPackage={specialPackage}
+            packages={packages}
             alaCarte={alaCarte}
             selectedImage={selectedImage}
             selectedImage={imageModal}
@@ -486,8 +535,8 @@ function HomePage(props) {
             steps={steps}
             photos={photos}
             customer={_customer}
-            specialPackage={specialPackage} 
-            packages={packages} 
+            specialPackage={specialPackage}
+            packages={packages}
             alaCarte={alaCarte}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
@@ -509,10 +558,13 @@ function HomePage(props) {
           <ViewPhotos
             rest={rest}
             classes={classes}
-            // data={images}
+            photos={photos}
+            customer={_customer}
+            specialPackage={specialPackage}
+            packages={packages}
+            alaCarte={alaCarte}
             activeStep={activeStep}
             steps={steps}
-            // images={images.package.images}
             navImageClasses={navImageClasses}
             handleDoubleClick={handleDoubleClick}
             handleBack={handleBack}
@@ -533,7 +585,11 @@ function HomePage(props) {
           <EditPackage
             rest={rest}
             classes={classes}
-            // data={images}
+            photos={photos}
+            customer={_customer}
+            specialPackage={specialPackage}
+            packages={packages}
+            alaCarte={alaCarte}
             activeStep={activeStep}
             steps={steps}
             // images={images.package.images}

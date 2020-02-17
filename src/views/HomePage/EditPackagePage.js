@@ -26,6 +26,7 @@ import Card from "components/Card/Card.js";
 import { pinkColor } from "assets/jss/material-kit-react";
 import styles from "assets/jss/material-kit-react/views/editpackagePage.js";
 import image from "assets/img/bg7.jpg";
+import { constant } from "./../../config";
 
 function getImages() {
   return [
@@ -48,7 +49,12 @@ export default function EditPackage(props) {
     // getStepContent,
     // activeStep,
     // steps,
-    data,
+    // data,
+    photos,
+    customer,
+    specialPackage,
+    packages,
+    alaCarte,
     handleBack,
     handleSelectedPage,
     handleImageModal
@@ -77,7 +83,11 @@ export default function EditPackage(props) {
     else setEdit(true)
   }
 
-  console.log(data);
+  const checkPhoto = (url) => {
+    if (url != 'undefined' || url != null)
+      return true;
+    return false;
+  }
 
   return (
     <div
@@ -93,7 +103,7 @@ export default function EditPackage(props) {
           absolute
           color="tr"
           fixed
-          rightLinks={<HeaderLinks data={data}/>}
+        // rightLinks={<HeaderLinks data={data}/>}
         // {...rest}
         />
         <div className={classes.container}>
@@ -103,8 +113,10 @@ export default function EditPackage(props) {
             </GridItem>
             <GridItem justify="center" xs={12} sm={12} md={6} className={classes.alignText}>
               <div>
-                <h4 className={classes.header}>Edit Package A</h4>
-                <h4 className={classes.subheader}>Add {10 - data.package.images.filter(img => img.selected).length} more photos </h4>
+                <h4 className={classes.header}>Edit {packages.package_name}</h4>
+                <h4 className={classes.subheader}>Add more photos
+                {/* {10 - data.package.images.filter(img => img.selected).length}  */}
+                </h4>
                 /</div>
             </GridItem>
           </GridContainer>
@@ -125,14 +137,14 @@ export default function EditPackage(props) {
 
               <GridContainer>
                 <GridContainer justify="center" spacing={4}>
-                  {data.package.images.length > 0 ? data.package.images.map(img => (
-                    <div className={classes.photoGrid} onClick={() => !img.selected && data.package.images.filter(img => img.selected).length <= 9 ? handleImageModal(img, true) : handleImageModal(img, false)}>
+                  {photos.length > 0 ? photos.map((img, index) => (
+                    <div className={classes.photoGrid} onClick={() => handleImageModal({ img: img, index: index }, undefined, "editPhoto")}>
                       <Card>
                         <div>
                           <img
                             style={{ "border": img.selected ? `2px solid ${pinkColor}` : 0 }}
                             alt="..."
-                            src={img.image}
+                            src={checkPhoto(img.photo_thumbnail_url) ? `${constant.imgUrl}` + img.photo_thumbnail_url : null}
                             className={navImageClasses}
                           />
                         </div>
@@ -160,7 +172,6 @@ export default function EditPackage(props) {
             </GridItem>
           </GridContainer>
 
-          //footer
           <GridContainer justify="center">
             <GridItem xs={12} sm={12} md={12}>
               <GridContainer>

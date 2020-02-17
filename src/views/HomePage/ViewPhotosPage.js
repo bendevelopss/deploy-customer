@@ -8,59 +8,50 @@ import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
 
-import work1 from "assets/img/examples/olu-eletu.jpg";
-import work2 from "assets/img/examples/clem-onojeghuo.jpg";
-import work3 from "assets/img/examples/cynthia-del-rio.jpg";
-import work4 from "assets/img/examples/mariya-georgieva.jpg";
-import work5 from "assets/img/examples/clem-onojegaw.jpg";
+// import work1 from "assets/img/examples/olu-eletu.jpg";
+// import work2 from "assets/img/examples/clem-onojeghuo.jpg";
+// import work3 from "assets/img/examples/cynthia-del-rio.jpg";
+// import work4 from "assets/img/examples/mariya-georgieva.jpg";
+// import work5 from "assets/img/examples/clem-onojegaw.jpg";
 
 import GridContainer from "components/Grid/GridContainer";
 import Header from "components/Header/Header";
 import HeaderLinks from "components/Header/HeaderLinks";
 import Button from "components/CustomButtons/Button.js";
 import GridItem from "components/Grid/GridItem";
-import Footer from "components/Footer/Footer";
-import StepperComponent from "./StepperComponent";
+// import Footer from "components/Footer/Footer";
+// import StepperComponent from "./StepperComponent";
 import Card from "components/Card/Card.js";
 
-import { pinkColor } from "assets/jss/material-kit-react";
+// import { pinkColor } from "assets/jss/material-kit-react";
 import styles from "assets/jss/material-kit-react/views/viewphotosPage.js";
 import image from "assets/img/bg7.jpg";
-
-function getImages() {
-  return [
-    { image: work1, index: 0, liked: false, selected: false },
-    { image: work2, index: 1, liked: false, selected: false },
-    { image: work3, index: 2, liked: false, selected: false },
-    { image: work4, index: 3, liked: false, selected: false },
-    { image: work5, index: 4, liked: false, selected: false },
-    { image: work1, index: 5, liked: false, selected: false },
-    { image: work2, index: 6, liked: false, selected: false },
-    // { image: work3, index: 7, liked: false, selected: false },
-  ];
-}
-
+import { constant } from "./../../config";
 
 export default function ViewPhotos(props) {
   const {
-    // rest,
-    // classes
-    // getStepContent,
-    // activeStep,
-    // steps,
-    // images,
+    photos,
+    customer,
+    specialPackage,
+    packages,
+    alaCarte,
     handleBack,
     handleSelectedPage,
     // handleReset,
     handleNext,
-    data
+    // data
     // isStepOptional,
     // handleSkip,
     // handleReturn
   } = props;
 
-  const [images, setImages] = React.useState(getImages());
+  console.log('====================================');
+  console.log(props);
+  console.log('====================================');
+
+  const [images, setImages] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
+  const [allPackages, setAllPackages] = React.useState([]);
 
   const useStyles = makeStyles(styles);
   const classes = useStyles();
@@ -77,7 +68,23 @@ export default function ViewPhotos(props) {
     else setEdit(true)
   }
 
-  console.log(data);
+  const combinePackages = () => {
+    let _allPackage = [];
+
+    if (allPackages.length > 0) _allPackage.push(allPackages)
+    if (packages.item.filter(el => el.isAvailed).length > 0) _allPackage.push(...packages.item.filter(el => el.isAvailed))
+    if (alaCarte.filter(el => el.isAvailed).length > 0) _allPackage.push(...alaCarte.filter(el => el.isAvailed))
+    if (specialPackage.item.filter(el => el.isAvailed).length > 0) _allPackage.push(...specialPackage.item.filter(el => el.isAvailed))
+
+    _allPackage.forEach(el => el.unit_cost = Number(el.unit_cost))
+    setAllPackages(_allPackage)
+  }
+
+  const checkPhoto = (url) => {
+    if (url != 'undefined' || url != null)
+      return true;
+    return false;
+  }
 
   return (
     <div
@@ -93,18 +100,20 @@ export default function ViewPhotos(props) {
           absolute
           color="tr"
           fixed
-          rightLinks={<HeaderLinks data={data}/>}
+        // rightLinks={<HeaderLinks data={data} />}
         // {...rest}
         />
         <div className={classes.container}>
           <GridContainer style={{ width: '70%' }}>
             <GridItem xs={12} sm={12} md={6}>
-              <Button round color="pink" onClick={handleBack, () => handleSelectedPage("")}>Back</Button>
+              {/* <Button round color="pink" onClick={handleBack, () => handleSelectedPage("")}>Back</Button> */}
             </GridItem>
             <GridItem justify="center" xs={12} sm={12} md={6} style={{ 'text-align': 'center' }}>
               <div>
-                <h4 className={classes.header}>Package A</h4>
-                <h4 className={classes.subheader}>{data.package.images.filter(e => e.selected).length * data.packageType.length} photos in total</h4>
+                <h4 className={classes.header}>{packages.package_name}</h4>
+                <h4 className={classes.subheader}>
+                  {/* {data.package.images.filter(e => e.selected).length * data.packageType.length}  */}
+                  photos in total</h4>
                 /</div>
             </GridItem>
           </GridContainer>
@@ -114,7 +123,7 @@ export default function ViewPhotos(props) {
 
             <GridItem xs={12} sm={12} md={12}>
               {
-                data.packageType.map(type => (
+                packages && packages.item.length > 0 ? packages.item.filter(el => el.isAvailed).map(pack => (
                   <div>
 
                     <GridContainer className={classes.headerLine}>
@@ -122,7 +131,7 @@ export default function ViewPhotos(props) {
                         <span className={classes.icons}>
                           <i className="fa fa-images" />
                         </span>
-                        <span className={classes.title}>{type.name}</span>
+                        <span className={classes.title}>{pack.product_name}</span>
                         <span>
                           <Button simple color="pink" onClick={enableEdit}>Edit</Button>
                         </span>
@@ -132,35 +141,37 @@ export default function ViewPhotos(props) {
                     <GridContainer>
                       <GridContainer justify="center" spacing={4}>
                         {
-                          data.package.images.length > 0 ? data.package.images.filter(e => e.selected).map(img => (
-                            <div style={{ width: '20%', marginRight: 8 }}>
+                          pack && pack.photos && pack.photos.length > 0 ? pack.photos.map(img => (
+                            <div style={{ marginRight: 8 }}>
                               <Card>
                                 <div >
                                   <img
                                     alt="..."
-                                    src={img.image}
+                                    src={checkPhoto(img.src) ? `${constant.imgUrl}` + img.src : null}
                                     className={navImageClasses}
                                   />
                                 </div>
                               </Card>
                             </div>
                           ))
+                            :  <h4 className={classes.title}>NO PHOTOS SELECTED</h4>
+                        }
+
+                        {
+                          pack.photos.length === 0 && !isEdit ? <h4 className={classes.title}>NO PHOTOS SELECTED</h4>
                             : null
                         }
+
                         {isEdit ?
-                          <div style={{ width: '15vw', marginRight: 8, "padding-top": "7vh" }} onClick={() => handleSelectedPage("editPackage")}>
+                          <div style={{ width: '15vw', marginRight: 8, "padding-top": "2vh" }} onClick={() => handleSelectedPage("editPackage", pack)}>
                             <div style={{ border: '5px dotted pink', textAlign: 'center' }}>
                               <span className={classes.icons} style={{ textAlign: 'center' }}>
                                 <i class="fas fa-plus" style={{ fontSize: '10vh' }}></i>
-                                <h4 className={classes.title}>Add {10 - data.package.images.filter(img => img.selected).length} more photos</h4>
+                                <h4 className={classes.title}>Add more photos</h4>
                               </span>
                             </div>
                           </div>
                           : null
-                        }
-                        {
-                          data.package.images.filter(e => e.selected).length === 0 && !isEdit ? <h4 className={classes.title}>NO PHOTOS SELECTED</h4>
-                            : null
                         }
 
                       </GridContainer>
@@ -169,7 +180,7 @@ export default function ViewPhotos(props) {
 
                   </div>
 
-                ))
+                )) : null
               }
             </GridItem>
 
